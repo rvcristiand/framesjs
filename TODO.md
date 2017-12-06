@@ -43,7 +43,7 @@ Port one by one the java packages in the following stages:
 
 *Goal:* Implement [Desktop version](https://github.com/VisualComputing/proscene.js/tree/processing) and [examples](https://github.com/VisualComputing/proscene.js/tree/processing/testing) (@nakednous). Status: mostly completed, refer to this [TODO](https://github.com/VisualComputing/proscene.js/blob/processing/TODO.md).
 
-## Stage 2
+#### Stage 2
 
 *Goal:Port _timing_ (@sechaparroc), _input_ (@sechaparroc) and _primitives_ (to be defined) packages.
 *Software testing:
@@ -51,13 +51,13 @@ Port one by one the java packages in the following stages:
   2. Port the _input_ examples at the [bias.js gh-pages branch](https://github.com/VisualComputing/bias.js/tree/gh-pages) (@sechaparroc and @jiapulidoar); the site will be rendered [here](https://visualcomputing.github.io/bias.js/). Note that the gh-pages branch use [jekyll](https://jekyllrb.com/) to generate the content.
   3. Port the _primitives_ examples is pending...
 
-## Stage 3
+#### Stage 3
 
 *Goal: Port _core_ and _proscene_ packages.
 *Software testing: Port the _proscene_ examples at the [proscene.js gh-pages branch](https://github.com/VisualComputing/proscene.js/tree/gh-pages) (@sechaparroc, @jiapulidoar and @nakednous); the site will be rendered [here](https://visualcomputing.github.io/proscene.js/).
 *By-product: Software paper with new design, supported platforms and features.
 
-## Stage 4
+#### Stage 4
 
 *Goal:* Port inverse kinematics and implement [leap motion](https://en.wikipedia.org/wiki/Leap_Motion) and [NLP](https://en.wikipedia.org/wiki/Natural_language_processing) agents.
 
