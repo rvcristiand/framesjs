@@ -2,7 +2,7 @@
 
 ## Design principles
 
-Simple, expressive and extensible. Develop under Java ([processing branch](https://github.com/VisualComputing/proscene.js/tree/processing)) and port it from there to JS ([master branch](https://github.com/VisualComputing/proscene.js/tree/master)). No magic: Proscene does what it is told to do — no more, no less. The new architecture comprises the following packages:
+Simple, expressive, language-agnostic, and extensible [(2D/3D) scene graph](https://en.wikipedia.org/wiki/Scene_graph) featuring interaction, visualization and animation frameworks and supporting advanced (onscreen/offscreen) rendering techniques, such as [view frustum culling](http://cgvr.informatik.uni-bremen.de/teaching/cg_literatur/lighthouse3d_view_frustum_culling/index.html). Develop under Java ([processing branch](https://github.com/VisualComputing/proscene.js/tree/processing)) and port it from there to JS ([master branch](https://github.com/VisualComputing/proscene.js/tree/master)). No magic: Proscene does what it is told to do — no more, no less. The new architecture comprises the following packages:
 
 1. [Timing](https://github.com/VisualComputing/proscene.js/tree/processing/src/remixlab/timing). Status: API is completed and tested. Expect some (occasional) API docs updates.
 2. [Input](https://github.com/VisualComputing/proscene.js/tree/processing/src/remixlab/input). Status: API is completed and tested. Expect some API (occasional) docs updates.
@@ -46,11 +46,11 @@ Port one by one the java packages in the following stages:
 
 #### Stage 2
 
-* Goal: Port _timing_ (@sechaparroc), _input_ (@sechaparroc) and _primitives_ (to be defined who) packages.
+* Goal: Port _timing_ (@sechaparroc), _input_ (@sechaparroc) and _primitives_ (@jiapulidoar) packages.
 * Software testing:
     1. Port the [timing examples](https://github.com/VisualComputing/fpstiming.js/tree/processing/examples) at the [fpstiming.js gh-pages branch](https://github.com/VisualComputing/fpstiming.js/tree/gh-pages) (@sechaparroc and @jiapulidoar); the site will be rendered [here](https://visualcomputing.github.io/fpstiming.js/). Note that the gh-pages branch use [jekyll](https://jekyllrb.com/) to generate the content.
     2. Port the [input examples](https://github.com/VisualComputing/bias.js/tree/processing/examples) at the [bias.js gh-pages branch](https://github.com/VisualComputing/bias.js/tree/gh-pages) (@sechaparroc and @jiapulidoar); the site will be rendered [here](https://visualcomputing.github.io/bias.js/). Note that the gh-pages branch use [jekyll](https://jekyllrb.com/) to generate the content.
-    3. Port the _primitives_ examples is pending...
+    3. Create _primitives_ examples to test the functionality. Study the relation between proscene primitives and p5.js primitives (e.g., [Vector](https://p5js.org/reference/#/p5.Vector)). 
 
 #### Stage 3
 
@@ -62,3 +62,8 @@ Port one by one the java packages in the following stages:
 
 * Goal: Port inverse kinematics and implement [leap motion](https://en.wikipedia.org/wiki/Leap_Motion) and [NLP](https://en.wikipedia.org/wiki/Natural_language_processing) agents.
 * By-product: Paper: inverse kinematics based advanced interactions in js.
+
+## Working plan
+
+### @nakednous
+
