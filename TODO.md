@@ -48,8 +48,8 @@ Port one by one the java packages in the following stages:
 
 * Goal: Port _timing_ (@sechaparroc), _input_ (@sechaparroc) and _primitives_ (to be defined who) packages.
 * Software testing:
-    1. Port the _timing_ examples at the [fpstiming.js gh-pages branch](https://github.com/VisualComputing/fpstiming.js/tree/gh-pages) (@sechaparroc and @jiapulidoar); the site will be rendered [here](https://visualcomputing.github.io/fpstiming.js/). Note that the gh-pages branch use [jekyll](https://jekyllrb.com/) to generate the content.
-    2. Port the _input_ examples at the [bias.js gh-pages branch](https://github.com/VisualComputing/bias.js/tree/gh-pages) (@sechaparroc and @jiapulidoar); the site will be rendered [here](https://visualcomputing.github.io/bias.js/). Note that the gh-pages branch use [jekyll](https://jekyllrb.com/) to generate the content.
+    1. Port the [timing examples](https://github.com/VisualComputing/fpstiming.js/tree/processing/examples) at the [fpstiming.js gh-pages branch](https://github.com/VisualComputing/fpstiming.js/tree/gh-pages) (@sechaparroc and @jiapulidoar); the site will be rendered [here](https://visualcomputing.github.io/fpstiming.js/). Note that the gh-pages branch use [jekyll](https://jekyllrb.com/) to generate the content.
+    2. Port the [input examples](https://github.com/VisualComputing/bias.js/tree/processing/examples) at the [bias.js gh-pages branch](https://github.com/VisualComputing/bias.js/tree/gh-pages) (@sechaparroc and @jiapulidoar); the site will be rendered [here](https://visualcomputing.github.io/bias.js/). Note that the gh-pages branch use [jekyll](https://jekyllrb.com/) to generate the content.
     3. Port the _primitives_ examples is pending...
 
 #### Stage 3
