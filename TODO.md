@@ -87,3 +87,13 @@ We should focus on stage 2 completion while syncing with each other nicely. Next
 ### @sechaparroc tasks
 
 ### @jiapulidoar tasks
+
+#### Stage 2
+
+1. Timing examples, fpsTiming.js gh-pages branch. Aproximate due date: December, 2017.
+2. Input Examples, bias.js gh-pages branch. Aproximate due date: December, 2017.
+3. Port Primitives: Aproximate due date: -- 2018.
+   - Point  -- 
+   - Rectangle  --
+   - Vector  --
+   - Matrix  --
