@@ -2,7 +2,7 @@
 
 ## Design principles
 
-Simple, expressive, language-agnostic, and extensible [(2D/3D) scene graph](https://en.wikipedia.org/wiki/Scene_graph) featuring interaction, visualization and animation frameworks and supporting advanced (onscreen/offscreen) rendering techniques, such as [view frustum culling](http://cgvr.informatik.uni-bremen.de/teaching/cg_literatur/lighthouse3d_view_frustum_culling/index.html). Develop under Java ([processing branch](https://github.com/VisualComputing/proscene.js/tree/processing)) and port it from there to JS ([master branch](https://github.com/VisualComputing/proscene.js/tree/master)). No magic: Proscene does what it is told to do — no more, no less. The new architecture comprises the following packages:
+Simple, expressive, language-agnostic, and extensible [(2D/3D) scene graph](https://en.wikipedia.org/wiki/Scene_graph) featuring interaction, inverse kinematics, visualization and animation frameworks and supporting advanced (onscreen/offscreen) rendering techniques, such as [view frustum culling](http://cgvr.informatik.uni-bremen.de/teaching/cg_literatur/lighthouse3d_view_frustum_culling/index.html). Develop under Java ([processing branch](https://github.com/VisualComputing/proscene.js/tree/processing)) and port it from there to JS ([master branch](https://github.com/VisualComputing/proscene.js/tree/master)). No magic: Proscene does what it is told to do — no more, no less. The new architecture comprises the following packages:
 
 1. [Timing](https://github.com/VisualComputing/proscene.js/tree/processing/src/remixlab/timing). Status: API is completed and tested. Expect some (occasional) API docs updates.
 2. [Input](https://github.com/VisualComputing/proscene.js/tree/processing/src/remixlab/input). Status: API is completed and tested. Expect some API (occasional) docs updates.
@@ -70,6 +70,12 @@ Port one by one the java packages in the following stages:
 * By-product: Paper: inverse kinematics based advanced interactions in js.
 
 ## Working plan
+
+### Suggestion
+ 
+We should focus on stage 2 completion while syncing with each other nicely. Next milestone is running online the _input_ examples (@sechaparroc). Ideally, by 'that time' _primitives_ `Point`, `Rectangle`, `Vector` and `Matrix` should already been ported and tested (@jiapulidoar), and the API docs completed (@nakednous). I guess 'that time' (where we should celebrate a new planning meeting) should be at some point around March, 2018. What do you guys think?
+
+* Complete _input_ packages
 
 ### @nakednous tasks
 
