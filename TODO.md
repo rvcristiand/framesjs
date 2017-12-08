@@ -46,7 +46,7 @@ Port one by one the java packages in the following stages:
 
 #### Stage 2
 
-* Goal: Port _timing_ (@sechaparroc), _input_ (@sechaparroc) and _primitives_ (@jiapulidoar) packages.
+* Goal: Port _timing_ (@sechaparroc), _input_ (@sechaparroc), _primitives_ (@jiapulidoar) and constraint (@sechaparroc) packages.
 * Software testing:
     1. Port the [timing examples](https://github.com/VisualComputing/fpstiming.js/tree/processing/examples) at the [fpstiming.js gh-pages branch](https://github.com/VisualComputing/fpstiming.js/tree/gh-pages) (@sechaparroc and @jiapulidoar); the site will be rendered [here](https://visualcomputing.github.io/fpstiming.js/). Note that the gh-pages branch use [jekyll](https://jekyllrb.com/) to generate the content.
     2. Port the [input examples](https://github.com/VisualComputing/bias.js/tree/processing/examples) at the [bias.js gh-pages branch](https://github.com/VisualComputing/bias.js/tree/gh-pages) (@sechaparroc and @jiapulidoar); the site will be rendered [here](https://visualcomputing.github.io/bias.js/). Note that the gh-pages branch use [jekyll](https://jekyllrb.com/) to generate the content.
@@ -55,8 +55,8 @@ Port one by one the java packages in the following stages:
         2. Rectangle
         3. Vector
         4. Matrix
-        5. Quaternion. Suggested reading: [3D Math Primer for Graphics and Game Development de F.Dunn and I.Parberry](https://tfetimes.com/wp-content/uploads/2015/04/F.Dunn-I.Parberry-3D-Math-Primer-for-Graphics-and-Game-Development.pdf), Section 10.4. Quaterions.
-        6. Frame (and then constraints inner package) which comprises a vector (position), a quaternion (orientation) and a magnitude (scalar).
+        5. Quaternion. Suggested reading: [3D Math Primer for Graphics and Game Development de F.Dunn and I.Parberry](https://tfetimes.com/wp-content/uploads/2015/04/F.Dunn-I.Parberry-3D-Math-Primer-for-Graphics-and-Game-Development.pdf), Section 10.4. Quaternions.
+        6. Frame which comprises a vector (position), a quaternion (orientation) and a magnitude (scalar).
 
 #### Stage 3
 
