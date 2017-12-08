@@ -73,6 +73,8 @@ Port one by one the java packages in the following stages:
 
 ### @nakednous tasks
 
+#### Stage 2
+
 1. API docs. Aproximate due date: March, 2018.
 2. Proscene (see TODO [here](https://github.com/VisualComputing/proscene.js/blob/processing/TODO.md)). Aproximate due date: March, 2018.
 
