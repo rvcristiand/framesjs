@@ -50,7 +50,13 @@ Port one by one the java packages in the following stages:
 * Software testing:
     1. Port the [timing examples](https://github.com/VisualComputing/fpstiming.js/tree/processing/examples) at the [fpstiming.js gh-pages branch](https://github.com/VisualComputing/fpstiming.js/tree/gh-pages) (@sechaparroc and @jiapulidoar); the site will be rendered [here](https://visualcomputing.github.io/fpstiming.js/). Note that the gh-pages branch use [jekyll](https://jekyllrb.com/) to generate the content.
     2. Port the [input examples](https://github.com/VisualComputing/bias.js/tree/processing/examples) at the [bias.js gh-pages branch](https://github.com/VisualComputing/bias.js/tree/gh-pages) (@sechaparroc and @jiapulidoar); the site will be rendered [here](https://visualcomputing.github.io/bias.js/). Note that the gh-pages branch use [jekyll](https://jekyllrb.com/) to generate the content.
-    3. Create _primitives_ examples to test the functionality. Study the relation between proscene primitives and p5.js primitives (e.g., [Vector](https://p5js.org/reference/#/p5.Vector)). 
+    3. Create _primitives_ examples to test the functionality. Study the relation between proscene primitives and p5.js primitives (e.g., [Vector](https://p5js.org/reference/#/p5.Vector)). Port primitives in the following suggested order:
+        1. Point
+        2. Rectangle
+        3. Vector
+        4. Matrix
+        5. Quaternion. Suggested reading: [3D Math Primer for Graphics and Game Development de F.Dunn and I.Parberry](https://tfetimes.com/wp-content/uploads/2015/04/F.Dunn-I.Parberry-3D-Math-Primer-for-Graphics-and-Game-Development.pdf), Section 10.4. Quaterions.
+        6. Frame (and then constraints inner package) which comprises a vector (position), a quaternion (orientation) and a magnitude (scalar).
 
 #### Stage 3
 
@@ -67,3 +73,6 @@ Port one by one the java packages in the following stages:
 
 ### @nakednous
 
+### @sechaparroc
+
+### @jiapulidoar
