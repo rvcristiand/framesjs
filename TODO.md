@@ -75,7 +75,7 @@ Port one by one the java packages in the following stages:
  
 We should focus on stage 2 completion while syncing with each other nicely. Next milestone is running online the _input_ examples (@sechaparroc). Ideally, by 'that time' _primitives_ `Point`, `Rectangle`, `Vector` and `Matrix` should already been ported and tested (@jiapulidoar), and the API docs completed (@nakednous). I guess 'that time' (where we should celebrate a new planning meeting) should be at some point around March, 2018. What do you guys think?
 
-* Complete _input_ packages
+> Milestone: Run _input_ examples
 
 ### @nakednous tasks
 
