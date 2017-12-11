@@ -29,6 +29,10 @@ Observe:
 
 ## JS port
 
+### Rerefences
+
+* [P5.js libraries](https://github.com/processing/p5.js/wiki/Libraries).
+
 ### Code conventions
 
 * [ECMAScript 2015](http://es6-features.org) (a.k.a., ECMAScript6 or [ES6](https://en.wikipedia.org/wiki/ECMAScript#6th_Edition_-_ECMAScript_2015)) compatibility with [class support](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes).
