@@ -81,12 +81,6 @@ Thanks to [Jacques Maire](http://www.xelyx.fr) for providing most of the example
 Thanks to [Victor Forero](https://sites.google.com/site/proscenedroi/home) for coding the initial Android agents.
 Thanks also to all **ProScene** users whose sketchs and library hacks always amaze us and inspire us.
 
-# Author, core developer and maintainer
-
-[Jean Pierre Charalambos](http://disi.unal.edu.co/profesores/pierre/), [National University of Colombia](http://www.unal.edu.co)
-
-[![Analytics](https://ga-beacon.appspot.com/UA-45867702-2/proscene/readme)](https://github.com/igrigorik/ga-beacon)
-
 ## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
