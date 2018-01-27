@@ -52,6 +52,26 @@
         "tutorial",
         "video"
       ]
+    },
+    {
+      "login": "jiapulidoar",
+      "name": "Jimmynex",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/13878096?v=4",
+      "profile": "https://github.com/jiapulidoar",
+      "contributions": [
+        "blog",
+        "bug",
+        "code",
+        "design",
+        "doc",
+        "example",
+        "fundingFinding",
+        "ideas",
+        "question",
+        "talk",
+        "tutorial",
+        "video"
+      ]
     }
   ]
 }
