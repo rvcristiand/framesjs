@@ -13,7 +13,7 @@ ProScene [![Version](https://img.shields.io/badge/proscene-v3.0.0-brightgreen.sv
 - [Acknowledgements](#user-content-acknowledgements)
 - [Author, core developer and maintainer](#user-content-author-core-developer-and-maintainer)
 
-# Description
+## Description
 
 **ProScene** (pronounced similar as the Czech word **"prosím"** which means **"please"**) is a free-software java library which provides classes to ease the creation of interactive 2D/3D scenes in [Processing](http://processing.org).
 
@@ -23,12 +23,12 @@ ProScene [![Version](https://img.shields.io/badge/proscene-v3.0.0-brightgreen.sv
 
 **ProScene** support is led by the active and great Processing community at its [forum](http://forum.processing.org/two/search?Search=proscene) where you can reach us. News and technical details are found at our [blog](http://nakednous.github.io/).
 
-# Philosophy
+## Philosophy
 
 One of the main Proscene goals is to provide [HCI](https://en.wikipedia.org/wiki/Human%E2%80%93computer_interaction) researchers with a common and simple, yet fully customizable, framework to test different experimental ideas involving
 the _three universal interaction tasks_: Object selection & manipulation, including the scene point-of-view; and, application control. For further details please refer to [this paper](http://www.sciencedirect.com/science/article/pii/S235271101730002X).
 
-# Key features
+## Key features
 
 * *Tested* under Linux, Mac OSX and Windows, and properly works with the JAVA2D, FX2D, P2D and P3D **Processing** renderers. No special dependencies or requirements needed (apart of course from [Processing >= 3.2.4](https://github.com/processing/processing/releases)).
 * It supports all major **Processing** flavours: Desktop, Android (since [Proscene v-3.0.0-beta.6](https://github.com/remixlab/proscene/releases/tag/v-3.0.0-beta.6)) and (soon) JS.
@@ -52,11 +52,11 @@ the _three universal interaction tasks_: Object selection & manipulation, includ
 * Active support and continuous discussions led by the [Processing community](http://forum.processing.org/two/search?Search=proscene).
 * Last but not least, released as free software under the terms of the [GPL-v3](http://www.gnu.org/licenses/gpl.html).
 
-# Origin of the name
+## Origin of the name
 
 *ProScene* not only means a *"pro-scene"*, but it is a two-phoneme word pronounced similar as the Czech word *"prosím"* (which means *"please"*), obtained by removing the middle phoneme (*"ce"*) of the word *pro-ce-ssing*. The name *"ProScene"* thus suggests the main goal of the package, which is to help you _shorten_ the creation of interactive 2D/3D scenes in **Processing**.
 
-# Usage
+## Usage
 
 All library features requires a `Scene` object (which is the main package class) to be instantiated (usually within your sketch setup method). There are two ways to do that:
 
@@ -69,7 +69,7 @@ include (but are not limited to): drawing mechanisms, animation framework, and c
 the fully documented [API reference](http://remixlab.github.io/proscene-javadocs/) (which is also
 included in the package file).
 
-# Installation
+## Installation
 
 Import/update it directly from your PDE. Otherwise download your release from [here](https://github.com/remixlab/proscene/releases) and extract it to your sketchbook `libraries` folder.
 
