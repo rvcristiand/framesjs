@@ -73,14 +73,6 @@ included in the package file).
 
 Import/update it directly from your PDE. Otherwise download your release from [here](https://github.com/remixlab/proscene/releases) and extract it to your sketchbook `libraries` folder.
 
-# Acknowledgements
-
-Thanks to [Eduardo Moriana](http://edumo.net/) and [Miguel Parra](http://maparrar.github.io/) for their contributions with the [TUIO](http://www.tuio.org/)-based touch and kinect interfaces, respectively.
-Thanks to experimental computational designer [Amnon Owed](https://twitter.com/AmnonOwed/media) for his collaboration with polishing the KeyFrameInterpolator sub-system.
-Thanks to [Jacques Maire](http://www.xelyx.fr) for providing most of the examples found at the *Geom* section. Thanks to [Andres Colubri](http://codeanticode.wordpress.com/) for his continuous support and thorough insights.
-Thanks to [Victor Forero](https://sites.google.com/site/proscenedroi/home) for coding the initial Android agents.
-Thanks also to all **ProScene** users whose sketchs and library hacks always amaze us and inspire us.
-
 ## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
