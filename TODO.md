@@ -85,8 +85,8 @@ We should focus on stage 2 completion while syncing with each other nicely. Next
 
 #### Stage 2
 
-1. API docs. Aproximate due date: March, 2018.
-2. Proscene (see TODO [here](https://github.com/VisualComputing/proscene.js/blob/processing/TODO.md)). Aproximate due date: March, 2018.
+1. ~API docs. Aproximate due date: March, 2018.~
+2. ~Proscene (see TODO [here](https://github.com/VisualComputing/proscene.js/blob/processing/TODO.md)). Aproximate due date: March, 2018.~
 
 ### @sechaparroc tasks
 
