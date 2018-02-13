@@ -23,9 +23,9 @@ Observe:
 3. ~Make eye nodes indistinguible from other nodes, i.e., they can interchangeably be used.~
 4. ~Rethink third person camera by removing Trackable in favor of 3.~
 5. ~Better 2D and 3D merging by removing Eye hierarchy and move its functionality into the Graph.~
-6. Rethink constraints to cope with inverse kinematics framework.
+6. ~Rethink constraints to cope with inverse kinematics framework.~
 7. Port the framework to JS (from all the previous points).
-8. Implement proscene package to simplify all the examples which should be ported and update the API docs.
+8. ~Implement proscene package to simplify all the examples which should be ported and update the API docs.~
 
 ## JS port
 
@@ -46,14 +46,14 @@ Port one by one the java packages in the following stages:
 
 #### Stage 1
 
-* Goal: Implement [Desktop version](https://github.com/VisualComputing/proscene.js/tree/processing) and [examples](https://github.com/VisualComputing/proscene.js/tree/processing/testing) (@nakednous). Status: mostly completed, refer to this [TODO](https://github.com/VisualComputing/proscene.js/blob/processing/TODO.md).
+* ~Goal: Implement [Desktop version](https://github.com/VisualComputing/proscene.js/tree/processing) and [examples](https://github.com/VisualComputing/proscene.js/tree/processing/testing)~ (@nakednous). Status: completed, refer to this [TODO](https://github.com/VisualComputing/proscene.js/blob/processing/TODO.md) for details.
 
 #### Stage 2
 
-* Goal: Port _timing_ (@sechaparroc), _input_ (@sechaparroc), _primitives_ (@jiapulidoar) and constraint (@sechaparroc) packages.
+* Goal: Port ~_timing_ (@sechaparroc), _input_ (@sechaparroc)~, _primitives_ (@jiapulidoar) and constraint (@sechaparroc) packages.
 * Software testing:
-    1. Port the [timing examples](https://github.com/VisualComputing/fpstiming.js/tree/processing/examples) at the [fpstiming.js gh-pages branch](https://github.com/VisualComputing/fpstiming.js/tree/gh-pages) (@sechaparroc and @jiapulidoar); the site will be rendered [here](https://visualcomputing.github.io/fpstiming.js/). Note that the gh-pages branch use [jekyll](https://jekyllrb.com/) to generate the content.
-    2. Port the [input examples](https://github.com/VisualComputing/bias.js/tree/processing/examples) at the [bias.js gh-pages branch](https://github.com/VisualComputing/bias.js/tree/gh-pages) (@sechaparroc and @jiapulidoar); the site will be rendered [here](https://visualcomputing.github.io/bias.js/). Note that the gh-pages branch use [jekyll](https://jekyllrb.com/) to generate the content.
+    ~1. Port the [timing examples](https://github.com/VisualComputing/fpstiming.js/tree/processing/examples) at the [fpstiming.js gh-pages branch](https://github.com/VisualComputing/fpstiming.js/tree/gh-pages) (@sechaparroc and @jiapulidoar); the site will be rendered [here](https://visualcomputing.github.io/fpstiming.js/). Note that the gh-pages branch use [jekyll](https://jekyllrb.com/) to generate the content.~
+    ~2. Port the [input examples](https://github.com/VisualComputing/bias.js/tree/processing/examples) at the [bias.js gh-pages branch](https://github.com/VisualComputing/bias.js/tree/gh-pages) (@sechaparroc and @jiapulidoar); the site will be rendered [here](https://visualcomputing.github.io/bias.js/). Note that the gh-pages branch use [jekyll](https://jekyllrb.com/) to generate the content.~
     3. Create _primitives_ examples to test the functionality. Study the relation between proscene primitives and p5.js primitives (e.g., [Vector](https://p5js.org/reference/#/p5.Vector)). Port primitives in the following suggested order:
         1. Point
         2. Rectangle
