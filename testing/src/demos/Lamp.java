@@ -5,9 +5,9 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import frames.primitives.Quaternion;
 import frames.primitives.Vector;
-import frames.primitives.constraint.AxisPlaneConstraint;
-import frames.primitives.constraint.LocalConstraint;
-import frames.primitives.constraint.WorldConstraint;
+import frames.core.constraint.AxisPlaneConstraint;
+import frames.core.constraint.LocalConstraint;
+import frames.core.constraint.WorldConstraint;
 import frames.processing.Scene;
 
 /**

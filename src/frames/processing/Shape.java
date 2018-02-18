@@ -16,7 +16,7 @@ import processing.core.PShape;
 import processing.core.PVector;
 import processing.opengl.PGraphicsOpenGL;
 import frames.core.Node;
-import frames.primitives.Frame;
+import frames.core.Frame;
 
 /**
  * A shape is a {@link Node} specialization that can be set from a retained-mode rendering

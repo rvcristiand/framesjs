@@ -16,7 +16,7 @@ import frames.input.Grabber;
 import frames.input.InputHandler;
 import frames.input.event.*;
 import frames.primitives.*;
-import frames.primitives.constraint.WorldConstraint;
+import frames.core.constraint.WorldConstraint;
 import frames.timing.TimingHandler;
 import frames.timing.TimingTask;
 
@@ -32,7 +32,7 @@ import java.util.List;
  * <h2>Geometry transformations</h2>
  * <p>
  * To define the position, orientation and magnitude of a visual object, use {@link #matrix()}
- * (see the {@link frames.primitives.Frame} class documentation for details) or
+ * (see the {@link Frame} class documentation for details) or
  * {@link #applyTransformation()} (or {@link #applyWorldTransformation()}), as shown below:
  * <p>
  * {@code // Builds a node located at (0,0,0) with an identity orientation (node and

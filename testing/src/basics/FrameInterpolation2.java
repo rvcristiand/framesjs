@@ -11,7 +11,7 @@ import frames.input.event.MotionEvent1;
 import frames.input.event.MotionEvent2;
 import frames.input.event.TapEvent;
 import frames.input.event.TapShortcut;
-import frames.primitives.Frame;
+import frames.core.Frame;
 import frames.processing.Scene;
 import frames.processing.Shape;
 

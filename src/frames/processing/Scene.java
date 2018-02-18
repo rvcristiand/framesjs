@@ -10,6 +10,7 @@
 
 package frames.processing;
 
+import frames.core.*;
 import processing.core.*;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
@@ -17,10 +18,6 @@ import processing.opengl.PGL;
 import processing.opengl.PGraphics3D;
 import processing.opengl.PGraphicsOpenGL;
 import processing.opengl.PShader;
-import frames.core.Graph;
-import frames.core.Interpolator;
-import frames.core.MatrixHandler;
-import frames.core.Node;
 import frames.input.Agent;
 import frames.input.Event;
 import frames.primitives.*;

@@ -5,7 +5,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import frames.core.Node;
 import frames.input.Event;
-import frames.primitives.Frame;
+import frames.core.Frame;
 import frames.processing.Mouse;
 import frames.processing.Scene;
 import frames.processing.Shape;

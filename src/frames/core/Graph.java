@@ -296,7 +296,7 @@ public class Graph {
    * <p>
    * A {@link Type#TWO_D} behaves like {@link Type#ORTHOGRAPHIC}, but instantiated graph
    * nodes will be constrained so that they will remain at the x-y plane. See
-   * {@link frames.primitives.constraint.Constraint}.
+   * {@link frames.core.constraint.Constraint}.
    * <p>
    * To set a {@link Type#CUSTOM} override {@link #computeCustomProjection()}.
    */

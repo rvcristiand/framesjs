@@ -3,7 +3,7 @@ package basics;
 import common.InteractiveNode;
 import processing.core.PApplet;
 import frames.core.Interpolator;
-import frames.primitives.Frame;
+import frames.core.Frame;
 import frames.processing.Scene;
 
 /**
