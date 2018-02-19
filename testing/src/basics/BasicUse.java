@@ -5,7 +5,6 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import frames.core.Node;
 import frames.input.Event;
-import frames.core.Frame;
 import frames.processing.Mouse;
 import frames.processing.Scene;
 import frames.processing.Shape;
@@ -15,7 +14,7 @@ import frames.processing.Shape;
  */
 public class BasicUse extends PApplet {
   Scene scene;
-  Frame frame;
+  Node frame;
   Node eye, node;
   float radius = 100;
   PGraphics pg;
@@ -30,7 +29,7 @@ public class BasicUse extends PApplet {
     scene = new Scene(this);
     scene.setRadius(400);
 
-    frame = new Frame();
+    frame = new Node(scene);
     eye = new InteractiveNode(scene);
 
     node = new Shape(scene) {

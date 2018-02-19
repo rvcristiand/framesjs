@@ -1,6 +1,7 @@
 package basics;
 
 import common.InteractiveNode;
+import frames.core.Node;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PShape;
@@ -11,7 +12,6 @@ import frames.input.event.MotionEvent1;
 import frames.input.event.MotionEvent2;
 import frames.input.event.TapEvent;
 import frames.input.event.TapShortcut;
-import frames.core.Frame;
 import frames.processing.Scene;
 import frames.processing.Shape;
 
@@ -104,11 +104,10 @@ public class FrameInterpolation2 extends PApplet {
     scene.drawPath(nodeInterpolator, 5);
     popStyle();
 
-    for (Frame frame : nodeInterpolator.keyFrames()) {
+    for (Node frame : nodeInterpolator.keyFrames()) {
       pushMatrix();
       scene.applyTransformation(frame);
-      // Horrible cast, but Java is just horrible
-      if (((InteractiveNode) frame).grabsInput())
+      if (frame.grabsInput())
         scene.drawAxes(35);
       else
         scene.drawAxes(20);

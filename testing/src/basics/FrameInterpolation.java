@@ -1,9 +1,9 @@
 package basics;
 
 import common.InteractiveNode;
+import frames.core.Node;
 import processing.core.PApplet;
 import frames.core.Interpolator;
-import frames.core.Frame;
 import frames.processing.Scene;
 
 /**
@@ -74,11 +74,10 @@ public class FrameInterpolation extends PApplet {
     scene.drawPath(nodeInterpolator, 5);
     popStyle();
 
-    for (Frame frame : nodeInterpolator.keyFrames()) {
+    for (Node frame : nodeInterpolator.keyFrames()) {
       pushMatrix();
       scene.applyTransformation(frame);
-      // Horrible cast, but Java is just horrible
-      if (((InteractiveNode) frame).grabsInput())
+      if (frame.grabsInput())
         scene.drawAxes(40);
       else
         scene.drawAxes(20);

@@ -2512,7 +2512,7 @@ public class Graph {
    *
    * @see #applyWorldTransformation(Node)
    */
-  public void applyTransformation(Frame frame) {
+  public void applyTransformation(Node frame) {
     if (is2D()) {
       matrixHandler().translate(frame.translation().x(), frame.translation().y());
       matrixHandler().rotate(frame.rotation().angle2D());
@@ -2528,8 +2528,8 @@ public class Graph {
    * Same as {@link #applyTransformation(Node)}, but applies the global transformation
    * defined by the frame.
    */
-  public void applyWorldTransformation(Frame frame) {
-    Frame reference = frame.reference();
+  public void applyWorldTransformation(Node frame) {
+    Node reference = frame.reference();
     if (reference != null) {
       applyWorldTransformation(reference);
       applyTransformation(frame);
