@@ -1,8 +1,8 @@
 package demos;
 
 import common.InteractiveFrame;
-import processing.core.PApplet;
 import frames.processing.Scene;
+import processing.core.PApplet;
 
 public class Luxo extends PApplet {
   Scene scene;

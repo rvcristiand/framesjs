@@ -10,14 +10,19 @@
 
 package frames.processing;
 
-import frames.core.*;
+import frames.core.Frame;
+import frames.core.Graph;
+import frames.core.Interpolator;
+import frames.core.MatrixHandler;
 import frames.input.Agent;
 import frames.input.Event;
-import frames.primitives.*;
+import frames.primitives.Matrix;
+import frames.primitives.Point;
+import frames.primitives.Quaternion;
+import frames.primitives.Vector;
 import frames.timing.SequentialTimer;
 import frames.timing.TimingHandler;
 import frames.timing.TimingTask;
-
 import processing.core.*;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
@@ -1732,7 +1737,7 @@ public class Scene extends Graph implements PConstants {
     }
     // draw the picking targets:
     for (Frame frame : interpolator.keyFrames())
-      if (!frame.isDetached())
+      if (isNodeReachable(frame))
         drawPickingTarget(frame);
     frontBuffer().popStyle();
   }

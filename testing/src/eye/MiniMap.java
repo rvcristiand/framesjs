@@ -3,11 +3,11 @@ package eye;
 import common.InteractiveFrame;
 import common.InteractiveShape;
 import frames.core.Frame;
-import processing.core.PApplet;
-import processing.core.PGraphics;
 import frames.core.Graph;
 import frames.processing.Scene;
 import frames.processing.Shape;
+import processing.core.PApplet;
+import processing.core.PGraphics;
 
 public class MiniMap extends PApplet {
   Scene scene, minimap;

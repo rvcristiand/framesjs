@@ -1,7 +1,7 @@
 package common;
 
-import frames.core.Graph;
 import frames.core.Frame;
+import frames.core.Graph;
 import frames.input.Event;
 import frames.processing.Mouse;
 

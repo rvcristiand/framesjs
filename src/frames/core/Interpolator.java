@@ -584,9 +584,8 @@ public class Interpolator {
     if (frame == null)
       return;
 
-    if (!frame.isDetached())
-      if (graph() != frame._graph)
-        throw new RuntimeException("Frame and Interpolator graphs should match");
+    if (graph() != frame._graph)
+      throw new RuntimeException("Frame and Interpolator graphs should match");
 
     if (_list.isEmpty())
       _time = time;
@@ -616,8 +615,7 @@ public class Interpolator {
     if (started())
       stop();
     KeyFrame keyFrame = _list.remove(index);
-    if (!keyFrame._frame.isDetached())
-      _graph.pruneBranch(keyFrame._frame);
+    _graph.pruneBranch(keyFrame._frame);
     setTime(firstTime());
   }
 
@@ -629,8 +627,7 @@ public class Interpolator {
     ListIterator<KeyFrame> it = _list.listIterator();
     while (it.hasNext()) {
       KeyFrame keyFrame = it.next();
-      if (!keyFrame._frame.isDetached())
-        _graph.pruneBranch(keyFrame._frame);
+      _graph.pruneBranch(keyFrame._frame);
     }
     _list.clear();
     _pathIsValid = false;
@@ -697,7 +694,7 @@ public class Interpolator {
 
       if (_list.get(0) == _list.get(_list.size() - 1))
         _path.add(
-            new Frame(_list.get(0).position(), _list.get(0).orientation(), _list.get(0).magnitude()));
+            Frame.detach(graph(), _list.get(0).position(), _list.get(0).orientation(), _list.get(0).magnitude()));
       else {
         KeyFrame[] kf = new KeyFrame[4];
         kf[0] = _list.get(0);
@@ -716,19 +713,8 @@ public class Interpolator {
           pvec2 = Vector.add(pvec2, kf[2].tangentVector());
 
           for (int step = 0; step < nbSteps; ++step) {
-            /*
-            Frame frame = new Frame();
             float alpha = step / (float) nbSteps;
-            frame.setPosition(Vector.add(kf[1].position(),
-                Vector.multiply(Vector.add(kf[1].tangentVector(), Vector.multiply(Vector.add(pvec1, Vector.multiply(pvec2, alpha)), alpha)), alpha)));
-            frame.setOrientation(
-                Quaternion.squad(kf[1].orientation(), kf[1].tangentQuaternion(), kf[2].tangentQuaternion(), kf[2].orientation(), alpha));
-            frame.setMagnitude(Vector.lerp(kf[1].magnitude(), kf[2].magnitude(), alpha));
-            _path.add(frame.get());
-            //*/
-            ///*
-            float alpha = step / (float) nbSteps;
-            _path.add(new Frame(
+            _path.add(Frame.detach(graph(),
                 Vector.add(kf[1].position(),
                     Vector.multiply(Vector.add(kf[1].tangentVector(), Vector.multiply(Vector.add(pvec1, Vector.multiply(pvec2, alpha)), alpha)), alpha)),
                 Quaternion.squad(kf[1].orientation(), kf[1].tangentQuaternion(), kf[2].tangentQuaternion(), kf[2].orientation(), alpha),
@@ -746,7 +732,7 @@ public class Interpolator {
           kf[3] = (index < _list.size()) ? _list.get(index) : null;
         }
         // Add last KeyFrame
-        _path.add(new Frame(kf[1].position(), kf[1].orientation(), kf[1].magnitude()));
+        _path.add(Frame.detach(graph(), kf[1].position(), kf[1].orientation(), kf[1].magnitude()));
       }
       _pathIsValid = true;
     }

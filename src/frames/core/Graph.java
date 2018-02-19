@@ -1188,7 +1188,7 @@ public class Graph {
       return;
     if (eye.graph() != this)
       throw new RuntimeException("This graph and eye.graph() should match");
-      //return;
+    //return;
     _eye = eye;
     _interpolator.setFrame(eye);
     _modified();

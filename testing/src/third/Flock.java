@@ -1,12 +1,12 @@
 package third;
 
 import common.InteractiveFrame;
-import processing.core.PApplet;
-import processing.core.PVector;
 import frames.core.Frame;
 import frames.primitives.Vector;
 import frames.processing.Mouse;
 import frames.processing.Scene;
+import processing.core.PApplet;
+import processing.core.PVector;
 
 import java.util.ArrayList;
 

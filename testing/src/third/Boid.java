@@ -1,12 +1,12 @@
 package third;
 
 import frames.core.Frame;
-import processing.core.PApplet;
-import processing.core.PVector;
 import frames.primitives.Quaternion;
 import frames.primitives.Vector;
 import frames.processing.Scene;
 import frames.timing.AnimatorObject;
+import processing.core.PApplet;
+import processing.core.PVector;
 
 import java.util.ArrayList;
 

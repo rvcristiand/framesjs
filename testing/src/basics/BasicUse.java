@@ -1,13 +1,13 @@
 package basics;
 
 import common.InteractiveFrame;
-import processing.core.PApplet;
-import processing.core.PGraphics;
 import frames.core.Frame;
 import frames.input.Event;
 import frames.processing.Mouse;
 import frames.processing.Scene;
 import frames.processing.Shape;
+import processing.core.PApplet;
+import processing.core.PGraphics;
 
 /**
  * Created by pierre on 11/15/16.

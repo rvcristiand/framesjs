@@ -10,9 +10,8 @@
 
 package frames.processing;
 
-import processing.core.PApplet;
-import frames.core.Graph;
 import frames.core.Frame;
+import frames.core.Graph;
 import frames.input.Agent;
 import frames.input.Event;
 import frames.input.Shortcut;
@@ -21,6 +20,7 @@ import frames.input.event.MotionEvent2;
 import frames.input.event.TapEvent;
 import frames.input.event.TapShortcut;
 import frames.primitives.Point;
+import processing.core.PApplet;
 
 /**
  * Mouse agent. A Processing fully fledged mouse {@link Agent}.

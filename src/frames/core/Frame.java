@@ -11,13 +11,13 @@
 package frames.core;
 
 import frames.core.constraint.Constraint;
+import frames.core.constraint.WorldConstraint;
 import frames.input.Agent;
 import frames.input.Event;
 import frames.input.Grabber;
 import frames.input.InputHandler;
 import frames.input.event.*;
 import frames.primitives.*;
-import frames.core.constraint.WorldConstraint;
 import frames.timing.TimingHandler;
 import frames.timing.TimingTask;
 
@@ -310,7 +310,7 @@ public class Frame implements Grabber {
     setReference(reference);
     _graph = graph;
 
-    if(graph() == null)
+    if (graph() == null)
       return;
 
     _id = ++graph()._nodeCount;
@@ -371,7 +371,7 @@ public class Frame implements Grabber {
     _constraint = other.constraint();
     this._graph = graph;
 
-    if(graph() == null)
+    if (graph() == null)
       return;
 
     if (this.graph() == other.graph()) {
@@ -450,17 +450,20 @@ public class Frame implements Grabber {
 
   // detached frames
 
-  public Frame(Vector translation, Quaternion rotation, float scaling) {
-    this(null, null, translation, rotation, scaling);
+  public static Frame detach(Graph graph, Vector position, Quaternion orientation, float magnitude) {
+    Frame frame = new Frame(graph);
+    graph.pruneBranch(frame);
+    frame.setPosition(position);
+    frame.setOrientation(orientation);
+    frame.setMagnitude(magnitude);
+    return frame;
   }
 
-  //TODO prefix these two with _
   public Frame detach() {
-    return new Frame(null, null, this.position(), this.orientation(), this.magnitude());
-  }
-
-  public boolean isDetached() {
-    return graph() == null;
+    Frame frame = new Frame(this.graph());
+    graph().pruneBranch(frame);
+    frame.setWorldMatrix(this);
+    return frame;
   }
 
   //_id
@@ -1285,7 +1288,7 @@ public class Frame implements Grabber {
    */
   public Matrix worldMatrix() {
     if (reference() != null)
-      return new Frame(position(), orientation(), magnitude()).matrix();
+      return detach().matrix();
     else
       return matrix();
   }
