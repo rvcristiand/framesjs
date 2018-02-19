@@ -12,7 +12,7 @@ package frames.processing;
 
 import processing.core.PApplet;
 import frames.core.Graph;
-import frames.core.Node;
+import frames.core.Frame;
 import frames.input.Agent;
 import frames.input.Event;
 import frames.input.Shortcut;
@@ -123,9 +123,9 @@ public class Mouse extends Agent {
   /**
    * Returns the current mouse input node. May be null.
    * <p>
-   * Same as {@code return inputGrabber() instanceof Node ? (Node) inputGrabber() : null}.
+   * Same as {@code return inputGrabber() instanceof Frame ? (Frame) inputGrabber() : null}.
    */
-  public Node inputNode() {
-    return inputGrabber() instanceof Node ? (Node) inputGrabber() : null;
+  public Frame inputNode() {
+    return inputGrabber() instanceof Frame ? (Frame) inputGrabber() : null;
   }
 }

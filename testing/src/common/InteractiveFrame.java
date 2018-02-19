@@ -1,24 +1,24 @@
 package common;
 
 import frames.core.Graph;
-import frames.core.Node;
+import frames.core.Frame;
 import frames.input.Event;
 import frames.processing.Mouse;
 
-public class InteractiveNode extends Node {
-  public InteractiveNode(Graph graph) {
+public class InteractiveFrame extends Frame {
+  public InteractiveFrame(Graph graph) {
     super(graph);
   }
 
   // this one gotta be overridden because we want a copied frame (e.g., line 100 above, i.e.,
   // scene.eye().get()) to have the same behavior as its original.
-  protected InteractiveNode(Graph otherGraph, InteractiveNode otherNode) {
+  protected InteractiveFrame(Graph otherGraph, InteractiveFrame otherNode) {
     super(otherGraph, otherNode);
   }
 
   @Override
-  public InteractiveNode get() {
-    return new InteractiveNode(this.graph(), this);
+  public InteractiveFrame get() {
+    return new InteractiveFrame(this.graph(), this);
   }
 
   // behavior is here :P

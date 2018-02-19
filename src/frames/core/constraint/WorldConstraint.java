@@ -10,7 +10,7 @@
 
 package frames.core.constraint;
 
-import frames.core.Node;
+import frames.core.Frame;
 import frames.primitives.Quaternion;
 import frames.primitives.Vector;
 
@@ -27,7 +27,7 @@ public class WorldConstraint extends AxisPlaneConstraint {
    * {@link #translationConstraintDirection()}.
    */
   @Override
-  public Vector constrainTranslation(Vector translation, Node frame) {
+  public Vector constrainTranslation(Vector translation, Frame frame) {
     Vector res = new Vector(translation._vector[0], translation._vector[1], translation._vector[2]);
     Vector proj;
     switch (translationConstraintType()) {
@@ -60,7 +60,7 @@ public class WorldConstraint extends AxisPlaneConstraint {
    * system by {@link #rotationConstraintDirection()}.
    */
   @Override
-  public Quaternion constrainRotation(Quaternion rotation, Node frame) {
+  public Quaternion constrainRotation(Quaternion rotation, Frame frame) {
     Quaternion res = rotation.get();
     switch (rotationConstraintType()) {
       case FREE:

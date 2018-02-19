@@ -1,8 +1,8 @@
 package frame;
 
-import common.InteractiveNode;
+import common.InteractiveFrame;
+import frames.core.Frame;
 import processing.core.PApplet;
-import frames.core.Node;
 import frames.primitives.Vector;
 import frames.processing.Scene;
 
@@ -12,15 +12,15 @@ import frames.processing.Scene;
 public class Sphere {
   Scene scene;
   PApplet parent;
-  Node iFrame;
+  Frame iFrame;
   float r;
   int c;
 
   public Sphere(Scene scn) {
     scene = scn;
     parent = scn.pApplet();
-    iFrame = new InteractiveNode(scene);
-    iFrame.setPrecision(Node.Precision.ADAPTIVE);
+    iFrame = new InteractiveFrame(scene);
+    iFrame.setPrecision(Frame.Precision.ADAPTIVE);
     setRadius(10);
   }
 

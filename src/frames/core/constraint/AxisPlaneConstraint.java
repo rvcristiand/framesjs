@@ -10,7 +10,7 @@
 
 package frames.core.constraint;
 
-import frames.core.Node;
+import frames.core.Frame;
 import frames.primitives.Quaternion;
 import frames.primitives.Vector;
 
@@ -71,7 +71,7 @@ public class AxisPlaneConstraint extends Constraint {
    * forced to stay into a plane ({@link Type#PLANE} ) or will not able to translate at
    * all ({@link Type#FORBIDDEN}).
    * <p>
-   * Use {@link Node#setPosition(Vector)} to define the position of
+   * Use {@link Frame#setPosition(Vector)} to define the position of
    * the constrained Frame before it gets constrained.
    */
   public Type translationConstraintType() {
@@ -182,7 +182,7 @@ public class AxisPlaneConstraint extends Constraint {
    * be able to rotate around an axis ({@link Type#AXIS}), or will not able to rotate at
    * all {@link Type#FORBIDDEN}.
    * <p>
-   * Use {@link Node#setOrientation(Quaternion)} to define the
+   * Use {@link Frame#setOrientation(Quaternion)} to define the
    * orientation of the constrained Frame before it gets constrained.
    * <p>
    * <b>Attention:</b> An {@link Type#PLANE} Type is not meaningful for rotational

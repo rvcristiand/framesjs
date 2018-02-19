@@ -1,7 +1,7 @@
 package basics;
 
-import common.InteractiveNode;
-import frames.core.Node;
+import common.InteractiveFrame;
+import frames.core.Frame;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PShape;
@@ -42,7 +42,7 @@ public class FrameInterpolation2 extends PApplet {
 
   public void setup() {
     scene = new Scene(this);
-    InteractiveNode eye = new InteractiveNode(scene);
+    InteractiveFrame eye = new InteractiveFrame(scene);
     scene.setEye(eye);
     //interactivity defaults to the eye
     scene.setDefaultNode(eye);
@@ -61,7 +61,7 @@ public class FrameInterpolation2 extends PApplet {
     // Create an initial path
     int nbKeyFrames = 4;
     for (int i = 0; i < nbKeyFrames; i++) {
-      InteractiveNode iNode = new InteractiveNode(scene);
+      InteractiveFrame iNode = new InteractiveFrame(scene);
       iNode.setPosition(-100 + 200 * i / (nbKeyFrames - 1), 0, 0);
       iNode.setScaling(random(0.25f, 4.0f));
       nodeInterpolator.addKeyFrame(iNode);
@@ -73,7 +73,7 @@ public class FrameInterpolation2 extends PApplet {
     auxCanvas.rectMode(CENTER);
     auxScene = new Scene(this, auxCanvas, oX, oY);
     //auxScene.disablePickingBuffer();
-    InteractiveNode eye1 = new InteractiveNode(auxScene);
+    InteractiveFrame eye1 = new InteractiveFrame(auxScene);
     auxScene.setEye(eye1);
     //interactivity defaults to the eye
     auxScene.setDefaultNode(eye1);
@@ -104,7 +104,7 @@ public class FrameInterpolation2 extends PApplet {
     scene.drawPath(nodeInterpolator, 5);
     popStyle();
 
-    for (Node frame : nodeInterpolator.keyFrames()) {
+    for (Frame frame : nodeInterpolator.keyFrames()) {
       pushMatrix();
       scene.applyTransformation(frame);
       if (frame.grabsInput())
@@ -126,7 +126,7 @@ public class FrameInterpolation2 extends PApplet {
       auxScene.beginDraw();
       auxCanvas.background(29, 153, 243);
       auxScene.drawAxes();
-      // calls visit() for each node in the graph
+      // calls visit() for each frame in the graph
       //auxScene.traverse();
       button.draw();
       auxScene.endDraw();

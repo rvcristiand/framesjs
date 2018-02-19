@@ -1,6 +1,6 @@
 package basics;
 
-import common.InteractiveNode;
+import common.InteractiveFrame;
 import processing.core.PApplet;
 import frames.processing.Scene;
 
@@ -16,7 +16,7 @@ public class Animation extends PApplet {
   public void setup() {
     scene = new Scene(this);
     //scene.shiftTimers();
-    InteractiveNode eye = new InteractiveNode(scene);
+    InteractiveFrame eye = new InteractiveFrame(scene);
     scene.setEye(eye);
     //interactivity defaults to the eye
     scene.setDefaultNode(eye);

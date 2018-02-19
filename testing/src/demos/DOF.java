@@ -1,6 +1,6 @@
 package demos;
 
-import common.InteractiveNode;
+import common.InteractiveFrame;
 import common.InteractiveShape;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -23,7 +23,7 @@ public class DOF extends PApplet {
     colorMode(HSB, 255);
     srcPGraphics = createGraphics(width, height, P3D);
     scene = new Scene(this, srcPGraphics);
-    InteractiveNode eye = new InteractiveNode(scene);
+    InteractiveFrame eye = new InteractiveFrame(scene);
     scene.setEye(eye);
     scene.setFieldOfView(PI / 3);
     //interactivity defaults to the eye

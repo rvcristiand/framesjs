@@ -1,8 +1,8 @@
 package basics;
 
+import frames.core.Frame;
 import processing.core.PApplet;
 import frames.core.Graph;
-import frames.core.Node;
 import frames.input.Shortcut;
 import frames.input.event.KeyEvent;
 import frames.input.event.KeyShortcut;
@@ -13,7 +13,7 @@ import frames.processing.Scene;
 
 public class TwoD extends PApplet {
   Scene scene;
-  Node eye, node;
+  Frame eye, frame;
   boolean target = true;
 
   public void info() {
@@ -39,7 +39,7 @@ public class TwoD extends PApplet {
     if (scene.is3D())
       scene.setType(Graph.Type.ORTHOGRAPHIC);
 
-    node = new InteractiveFrame(new Vector(40, -80, 0), new Quaternion(QUARTER_PI));
+    frame = new InteractiveFrame(new Vector(40, -80, 0), new Quaternion(QUARTER_PI));
     eye = new InteractiveFrame();
 
     scene.setEye(eye);
@@ -53,8 +53,8 @@ public class TwoD extends PApplet {
     background(0);
     scene.drawAxes(scene.radius());
     pushMatrix();
-    node.applyTransformation();
-    if (node.grabsInput())
+    frame.applyTransformation();
+    if (frame.grabsInput())
       fill(255, 0, 0);
     else
       fill(0, 255, 0);
@@ -65,7 +65,7 @@ public class TwoD extends PApplet {
       pushStyle();
       stroke(255);
       strokeWeight(2);
-      scene.drawPickingTarget(node);
+      scene.drawPickingTarget(frame);
       popStyle();
     }
 
@@ -85,7 +85,7 @@ public class TwoD extends PApplet {
       info();
   }
 
-  public class InteractiveFrame extends Node {
+  public class InteractiveFrame extends Frame {
     Shortcut left = new Shortcut(PApplet.LEFT);
     Shortcut right = new Shortcut(PApplet.RIGHT);
     Shortcut wheel = new Shortcut(processing.event.MouseEvent.WHEEL);

@@ -38,24 +38,24 @@ import java.util.List;
  * for 3d graphs and {@link Type#TWO_D} for a 2d graph. To set a {@link Type#CUSTOM}
  * override {@link #computeCustomProjection()}.
  * <h2>Scene graph handling</h2>
- * A graph forms a tree of {@link Node}s which may be {@link #traverse()}, calling
- * {@link Node#visit()} on each visited node (refer to the {@link Node} documentation).
+ * A graph forms a tree of {@link Frame}s which may be {@link #traverse()}, calling
+ * {@link Frame#visit()} on each visited node (refer to the {@link Frame} documentation).
  * The node collection belonging to the graph may be retrieved with {@link #nodes()}.
  * The graph provides other useful routines to handle the hierarchy, such as
- * {@link #pruneBranch(Node)}, {@link #appendBranch(List)}, {@link #isNodeReachable(Node)},
- * {@link #branch(Node)}, and {@link #clear()}.
+ * {@link #pruneBranch(Frame)}, {@link #appendBranch(List)}, {@link #isNodeReachable(Frame)},
+ * {@link #branch(Frame)}, and {@link #clear()}.
  * <h2>Eye handling</h2>
- * Any {@link Node} (belonging to the graph hierarchy) may be set as the
- * {@link #eye()} (see {@link #setEye(Node)}). Several frame wrapper functions to handle
+ * Any {@link Frame} (belonging to the graph hierarchy) may be set as the
+ * {@link #eye()} (see {@link #setEye(Frame)}). Several frame wrapper functions to handle
  * the eye, such as {@link #lookAt(Vector)}, {@link #at()}, {@link #setViewDirection(Vector)},
  * {@link #setUpVector(Vector)}, {@link #upVector()}, {@link #fitFieldOfView()},
  * {@link #fieldOfView()}, {@link #setHorizontalFieldOfView(float)}, {@link #fitBall()}
- * {@link #projectedCoordinatesOf(Vector, Node)} and
- * {@link #unprojectedCoordinatesOf(Vector, Node)}, are provided for convenience.
+ * {@link #projectedCoordinatesOf(Vector, Frame)} and
+ * {@link #unprojectedCoordinatesOf(Vector, Frame)}, are provided for convenience.
  * <h3>Interpolator</h3>
  * A default {@link #interpolator()} may perform several {@link #eye()} interpolations
  * such as {@link #fitBallInterpolation()}, {@link #fitScreenRegionInterpolation(Rectangle)},
- * {@link #interpolateTo(Node)} and {@link #interpolateTo(Node, float)}. Refer to the
+ * {@link #interpolateTo(Frame)} and {@link #interpolateTo(Frame, float)}. Refer to the
  * {@link Interpolator} documentation for details.
  * <h3>Visibility and culling techniques</h3>
  * Geometry may be culled against the viewing volume by calling {@link #isPointVisible(Vector)},
@@ -65,8 +65,8 @@ import java.util.List;
  * {@link #areBoundaryEquationsEnabled()}).
  * <h2>Input handling</h2>
  * The graph performs input handling through an {@link #inputHandler()}. Several
- * {@link InputHandler} wrapper functions, such as {@link #isInputNode(Node)},
- * {@link #setDefaultNode(Node)}, {@link #shiftDefaultNode(Node, Node)},
+ * {@link InputHandler} wrapper functions, such as {@link #isInputNode(Frame)},
+ * {@link #setDefaultNode(Frame)}, {@link #shiftDefaultNode(Frame, Frame)},
  * {@link #registerAgent(Agent)} and {@link #unregisterAgent(Agent)}, are provided for
  * convenience.
  * <p>
@@ -74,8 +74,8 @@ import java.util.List;
  * <a href="https://en.wikipedia.org/wiki/Human_interface_device">human interface device</a>
  * implement an {@link Agent} and call {@link #registerAgent(Agent)} (see also
  * {@link #unregisterAgent(Agent)}). The interaction is implemented by the
- * nodes (see {@link Node#interact(Event)}) which parse the {@link frames.input.Shortcut}s
- * defined by agent. Refer to the {@link Node} documentation for details.
+ * nodes (see {@link Frame#interact(Event)}) which parse the {@link frames.input.Shortcut}s
+ * defined by agent. Refer to the {@link Frame} documentation for details.
  * <h2>Timing handling</h2>
  * The graph performs timing handling through a {@link #timingHandler()}. Several
  * {@link TimingHandler} wrapper functions, such as {@link #registerTask(TimingTask)}
@@ -86,7 +86,7 @@ import java.util.List;
  * (which wrap {@link MatrixHandler} functions with the same signatures) and
  * (possibly) {@code Matrix.multiply(projection(), modelView())}.
  * <p>
- * To {@link #applyTransformation(Node)}, call {@link #pushModelView()},
+ * To {@link #applyTransformation(Frame)}, call {@link #pushModelView()},
  * {@link #popModelView()} and {@link #applyModelView(Matrix)} (which wrap
  * {@link MatrixHandler} functions with the same signatures).
  * <p>
@@ -102,14 +102,14 @@ import java.util.List;
  *
  * @see InputHandler
  * @see TimingHandler
- * @see #applyTransformation(Node)
+ * @see #applyTransformation(Frame)
  * @see MatrixHandler
  */
 //TODO
 // (decide) Remove printing stuff (vector, map, ...) and warnings (hashmap).
 public class Graph {
   // 1. Eye
-  protected Node _eye;
+  protected Frame _eye;
   protected long _lastEqUpdate;
   protected Vector _center;
   protected float _radius;
@@ -141,7 +141,7 @@ public class Graph {
   protected InputHandler _inputHandler;
 
   // 4. Graph
-  protected List<Node> _seeds;
+  protected List<Frame> _seeds;
   protected int _nodeCount;
   protected long _lastNonEyeUpdate = 0;
 
@@ -181,10 +181,10 @@ public class Graph {
    * {@code height} screen window dimensions. The graph {@link #center()} and
    * {@link #anchor()} are set to {@code (0,0,0)} and its {@link #radius()} to {@code 100}.
    * <p>
-   * The constructor sets a {@link Node} instance as the graph {@link #eye()} and then
+   * The constructor sets a {@link Frame} instance as the graph {@link #eye()} and then
    * calls {@link #fitBall()}, so that the entire scene fits the screen dimensions. To set
-   * an interactive eye override {@link Node#interact(Event)} and set the node as the eye,
-   * see {@link #setEye(Node)}.
+   * an interactive eye override {@link Frame#interact(Event)} and set the node as the eye,
+   * see {@link #setEye(Frame)}.
    * <p>
    * The constructor also instantiates the graph {@link #matrixHandler()},
    * {@link #inputHandler()} and {@link #timingHandler()}.
@@ -201,14 +201,14 @@ public class Graph {
    * @see #inputHandler()
    * @see #setMatrixHandler(MatrixHandler)
    * @see #setRightHanded()
-   * @see #setEye(Node)
+   * @see #setEye(Frame)
    */
   public Graph(Type type, int width, int height) {
     setType(type);
     setWidth(width);
     setHeight(height);
 
-    _seeds = new ArrayList<Node>();
+    _seeds = new ArrayList<Frame>();
     _timingHandler = new TimingHandler();
     _inputHandler = new InputHandler();
 
@@ -216,7 +216,7 @@ public class Graph {
     setCenter(new Vector());
     _anchor = center().get();
     _interpolator = new Interpolator(this);
-    setEye(new Node(this));
+    setEye(new Frame(this));
     fitBall();
 
     setMatrixHandler(new MatrixHandler(this));
@@ -330,7 +330,7 @@ public class Graph {
    * <p>
    * Sets the field-of-view of the current {@link #eye()}.
    *
-   * @see Node#setMagnitude(float)
+   * @see Frame#setMagnitude(float)
    */
   public void setFieldOfView(float fov) {
     eye().setMagnitude((float) Math.tan(fov / 2.0f));
@@ -560,42 +560,42 @@ public class Graph {
    * All leading nodes are also reachable by the {@link #traverse()} algorithm for which they are the seeds.
    *
    * @see #nodes()
-   * @see #isNodeReachable(Node)
-   * @see #pruneBranch(Node)
+   * @see #isNodeReachable(Frame)
+   * @see #pruneBranch(Frame)
    */
-  public List<Node> leadingNodes() {
+  public List<Frame> leadingNodes() {
     return _seeds;
   }
 
   /**
-   * Returns {@code true} if the node is top-level.
+   * Returns {@code true} if the frame is top-level.
    */
-  protected boolean _isLeadingNode(Node node) {
-    for (Node _node : leadingNodes())
-      if (_node == node)
+  protected boolean _isLeadingNode(Frame frame) {
+    for (Frame _frame : leadingNodes())
+      if (_frame == frame)
         return true;
     return false;
   }
 
   /**
-   * Add the node as top-level if its reference node is null and it isn't already added.
+   * Add the frame as top-level if its reference frame is null and it isn't already added.
    */
-  protected boolean _addLeadingNode(Node node) {
-    if (node == null || node.reference() != null)
+  protected boolean _addLeadingNode(Frame frame) {
+    if (frame == null || frame.reference() != null)
       return false;
-    if (_isLeadingNode(node))
+    if (_isLeadingNode(frame))
       return false;
-    return leadingNodes().add(node);
+    return leadingNodes().add(frame);
   }
 
   /**
-   * Removes the leading node if present. Typically used when re-parenting the node.
+   * Removes the leading frame if present. Typically used when re-parenting the frame.
    */
-  protected boolean _removeLeadingNode(Node node) {
+  protected boolean _removeLeadingNode(Frame frame) {
     boolean result = false;
-    Iterator<Node> it = leadingNodes().iterator();
+    Iterator<Frame> it = leadingNodes().iterator();
     while (it.hasNext()) {
-      if (it.next() == node) {
+      if (it.next() == frame) {
         it.remove();
         result = true;
         break;
@@ -606,146 +606,146 @@ public class Graph {
 
   /**
    * Traverse the node hierarchy, successively applying the local transformation defined
-   * by each traversed node, and calling {@link Node#visit()} on it.
+   * by each traversed node, and calling {@link Frame#visit()} on it.
    * <p>
    * Note that only reachable nodes are visited by this algorithm.
    * <p>
    * <b>Attention:</b> this method should be called after {@link #preDraw()} (i.e.,
    * eye update) and before any other transformation of the modelview matrix takes place.
    *
-   * @see #isNodeReachable(Node)
-   * @see #pruneBranch(Node)
+   * @see #isNodeReachable(Frame)
+   * @see #pruneBranch(Frame)
    */
   public void traverse() {
-    for (Node node : leadingNodes())
-      _visit(node);
+    for (Frame frame : leadingNodes())
+      _visit(frame);
   }
 
   /**
    * Used by the traversal algorithm.
    */
-  protected void _visit(Node node) {
+  protected void _visit(Frame frame) {
     pushModelView();
-    applyTransformation(node);
-    node.visit();
-    if (!node.isCulled())
-      for (Node child : node.children())
+    applyTransformation(frame);
+    frame.visit();
+    if (!frame.isCulled())
+      for (Frame child : frame.children())
         _visit(child);
     popModelView();
   }
 
   /**
-   * Same as {@code for(Node node : leadingNodes()) pruneBranch(node)}.
+   * Same as {@code for(Frame node : leadingNodes()) pruneBranch(node)}.
    *
-   * @see #pruneBranch(Node)
+   * @see #pruneBranch(Frame)
    */
   public void clear() {
-    for (Node node : leadingNodes())
-      pruneBranch(node);
+    for (Frame frame : leadingNodes())
+      pruneBranch(frame);
   }
 
   /**
-   * Make all the nodes in the {@code node} branch eligible for garbage collection.
+   * Make all the nodes in the {@code frame} branch eligible for garbage collection.
    * <p>
-   * A call to {@link #isNodeReachable(Node)} on all {@code node} descendants
-   * (including {@code node}) will return false, after issuing this method. It also means
-   * that all nodes in the {@code node} branch will become unreachable by the
+   * A call to {@link #isNodeReachable(Frame)} on all {@code frame} descendants
+   * (including {@code frame}) will return false, after issuing this method. It also means
+   * that all nodes in the {@code frame} branch will become unreachable by the
    * {@link #traverse()} algorithm.
    * <p>
-   * Nodes in the {@code node} branch will also be removed from all the agents currently
+   * Nodes in the {@code frame} branch will also be removed from all the agents currently
    * registered at the {@link #inputHandler()}.
    * <p>
    * To make all the nodes in the branch reachable again, first cache the nodes
-   * belonging to the branch (i.e., {@code branch=pruneBranch(node)}) and then call
+   * belonging to the branch (i.e., {@code branch=pruneBranch(frame)}) and then call
    * {@link #appendBranch(List)} on the cached branch. Note that calling
-   * {@link Node#setReference(Node)} on a node belonging to the pruned branch will become
-   * reachable again by the traversal algorithm. In this case, the node should be manually
+   * {@link Frame#setReference(Frame)} on a frame belonging to the pruned branch will become
+   * reachable again by the traversal algorithm. In this case, the frame should be manually
    * added to some agents to interactively handle it.
    * <p>
-   * Note that if node is not reachable ({@link #isNodeReachable(Node)}) this method returns
+   * Note that if frame is not reachable ({@link #isNodeReachable(Frame)}) this method returns
    * {@code null}.
    * <p>
-   * When collected, pruned nodes behave like {@link Node}, otherwise they are eligible for
+   * When collected, pruned nodes behave like {@link Frame}, otherwise they are eligible for
    * garbage collection.
    *
    * @see #clear()
    * @see #appendBranch(List)
-   * @see #isNodeReachable(Node)
+   * @see #isNodeReachable(Frame)
    */
-  public ArrayList<Node> pruneBranch(Node node) {
-    if (!isNodeReachable(node))
+  public ArrayList<Frame> pruneBranch(Frame frame) {
+    if (!isNodeReachable(frame))
       return null;
-    ArrayList<Node> list = new ArrayList<Node>();
-    _collectNodes(list, node);
-    for (Node _node : list) {
-      inputHandler().removeGrabber(_node);
-      if (_node.reference() != null)
-        _node.reference()._removeChild(_node);
+    ArrayList<Frame> list = new ArrayList<Frame>();
+    _collectNodes(list, frame);
+    for (Frame _frame : list) {
+      inputHandler().removeGrabber(_frame);
+      if (_frame.reference() != null)
+        _frame.reference()._removeChild(_frame);
       else
-        _removeLeadingNode(_node);
+        _removeLeadingNode(_frame);
     }
     return list;
   }
 
   /**
    * Appends the branch which typically should come from the one pruned (and cached) with
-   * {@link #pruneBranch(Node)}.
+   * {@link #pruneBranch(Frame)}.
    * <p>
    * All nodes belonging to the branch are automatically added to all graph agents.
    * <p>
-   * {@link #pruneBranch(Node)}
+   * {@link #pruneBranch(Frame)}
    */
-  public void appendBranch(List<Node> branch) {
+  public void appendBranch(List<Frame> branch) {
     if (branch == null)
       return;
-    for (Node node : branch) {
-      inputHandler().addGrabber(node);
-      if (node.reference() != null)
-        node.reference()._addChild(node);
+    for (Frame frame : branch) {
+      inputHandler().addGrabber(frame);
+      if (frame.reference() != null)
+        frame.reference()._addChild(frame);
       else
-        _addLeadingNode(node);
+        _addLeadingNode(frame);
     }
   }
 
   /**
-   * Returns {@code true} if the node is reachable by the {@link #traverse()}
+   * Returns {@code true} if the frame is reachable by the {@link #traverse()}
    * algorithm and {@code false} otherwise.
    * <p>
-   * Nodes are made unreachable with {@link #pruneBranch(Node)} and reachable
-   * again with {@link Node#setReference(Node)}.
+   * Nodes are made unreachable with {@link #pruneBranch(Frame)} and reachable
+   * again with {@link Frame#setReference(Frame)}.
    *
    * @see #traverse()
    * @see #nodes()
    */
-  public boolean isNodeReachable(Node node) {
-    if (node == null)
+  public boolean isNodeReachable(Frame frame) {
+    if (frame == null)
       return false;
-    return node.reference() == null ? _isLeadingNode(node) : node.reference()._hasChild(node);
+    return frame.reference() == null ? _isLeadingNode(frame) : frame.reference()._hasChild(frame);
   }
 
   /**
    * Returns a list of all the nodes that are reachable by the {@link #traverse()}
    * algorithm.
    *
-   * @see #isNodeReachable(Node)
-   * @see Node#isEye()
+   * @see #isNodeReachable(Frame)
+   * @see Frame#isEye()
    */
-  public ArrayList<Node> nodes() {
-    ArrayList<Node> list = new ArrayList<Node>();
-    for (Node node : leadingNodes())
-      _collectNodes(list, node);
+  public ArrayList<Frame> nodes() {
+    ArrayList<Frame> list = new ArrayList<Frame>();
+    for (Frame frame : leadingNodes())
+      _collectNodes(list, frame);
     return list;
   }
 
   /**
-   * Collects {@code node} and all its descendant nodes. Note that for a node to be collected
+   * Collects {@code frame} and all its descendant nodes. Note that for a frame to be collected
    * it must be reachable.
    *
-   * @see #isNodeReachable(Node)
+   * @see #isNodeReachable(Frame)
    */
-  public ArrayList<Node> branch(Node node) {
-    ArrayList<Node> list = new ArrayList<Node>();
-    _collectNodes(list, node);
+  public ArrayList<Frame> branch(Frame frame) {
+    ArrayList<Frame> list = new ArrayList<Frame>();
+    _collectNodes(list, frame);
     return list;
   }
 
@@ -755,19 +755,19 @@ public class Graph {
    * If {@code tip} is descendant of {@code tail} the returned list will include both of them.
    * Otherwise it will be empty.
    */
-  public ArrayList<Node> branch(Node tail, Node tip) {
-    ArrayList<Node> list = new ArrayList<Node>();
+  public ArrayList<Frame> branch(Frame tail, Frame tip) {
+    ArrayList<Frame> list = new ArrayList<Frame>();
     //1. Check if tip is a tail descendant
     boolean desc = false;
-    ArrayList<Node> descList = branch(tail);
-    for (Node node : descList)
-      if (node == tip) {
+    ArrayList<Frame> descList = branch(tail);
+    for (Frame frame : descList)
+      if (frame == tip) {
         desc = true;
         break;
       }
     //2. If so, return the path between the two
     if (desc) {
-      Node _tip = tip;
+      Frame _tip = tip;
       while (_tip != tail) {
         list.add(0, _tip);
         _tip = _tip.reference();
@@ -778,16 +778,16 @@ public class Graph {
   }
 
   /**
-   * Collects {@code node} and all its descendant nodes. Note that for a node to be collected
+   * Collects {@code frame} and all its descendant nodes. Note that for a frame to be collected
    * it must be reachable.
    *
-   * @see #isNodeReachable(Node)
+   * @see #isNodeReachable(Frame)
    */
-  protected void _collectNodes(List<Node> list, Node node) {
-    if (node == null)
+  protected void _collectNodes(List<Frame> list, Frame frame) {
+    if (frame == null)
       return;
-    list.add(node);
-    for (Node child : node.children())
+    list.add(frame);
+    for (Frame child : frame.children())
       _collectNodes(list, child);
   }
 
@@ -801,12 +801,12 @@ public class Graph {
   }
 
   /**
-   * Same as {@code inputHandler().setDefaultGrabber(node)}.
+   * Same as {@code inputHandler().setDefaultGrabber(frame)}.
    *
    * @see {@link InputHandler#setDefaultGrabber(Grabber)}
    */
-  public void setDefaultNode(Node node) {
-    inputHandler().setDefaultGrabber(node);
+  public void setDefaultNode(Frame frame) {
+    inputHandler().setDefaultGrabber(frame);
   }
 
   /**
@@ -819,21 +819,21 @@ public class Graph {
   }
 
   /**
-   * Same as {@code inputHandler().shiftDefaultGrabber(node1, node2)}.
+   * Same as {@code inputHandler().shiftDefaultGrabber(frame1, frame2)}.
    *
    * @see InputHandler#shiftDefaultGrabber(Grabber, Grabber)
    */
-  public void shiftDefaultNode(Node node1, Node node2) {
-    inputHandler().shiftDefaultGrabber(node1, node2);
+  public void shiftDefaultNode(Frame frame1, Frame frame2) {
+    inputHandler().shiftDefaultGrabber(frame1, frame2);
   }
 
   /**
-   * Same as {@code return inputHandler().isInputGrabber(node)}.
+   * Same as {@code return inputHandler().isInputGrabber(frame)}.
    *
    * @see InputHandler#isInputGrabber(Grabber)
    */
-  public boolean isInputNode(Node node) {
-    return inputHandler().isInputGrabber(node);
+  public boolean isInputNode(Frame frame) {
+    return inputHandler().isInputGrabber(frame);
   }
 
   /**
@@ -1171,19 +1171,19 @@ public class Graph {
   /**
    * Returns the associated eye. Never null.
    *
-   * @see #setEye(Node)
+   * @see #setEye(Frame)
    */
-  public Node eye() {
+  public Frame eye() {
     return _eye;
   }
 
   /**
    * Replaces the current {@link #eye()} with {@code eye}. If {@code eye} is instance of
-   * {@link Node} it should belong to this graph object.
+   * {@link Frame} it should belong to this graph object.
    *
    * @see #eye()
    */
-  public void setEye(Node eye) {
+  public void setEye(Frame eye) {
     if (eye == null || _eye == eye)
       return;
     if (eye.graph() != this)
@@ -1823,7 +1823,7 @@ public class Graph {
   /**
    * Convenience function that simply returns {@code projectedCoordinatesOf(src, null)}.
    *
-   * @see #projectedCoordinatesOf(Vector, Node)
+   * @see #projectedCoordinatesOf(Vector, Frame)
    */
   public Vector projectedCoordinatesOf(Vector vector) {
     return projectedCoordinatesOf(vector, null);
@@ -1840,9 +1840,9 @@ public class Graph {
    * (0,0) being the upper left corner of the window. The z coordinate ranges between 0
    * (near plane) and 1 (excluded, far plane).
    *
-   * @see #unprojectedCoordinatesOf(Vector, Node)
+   * @see #unprojectedCoordinatesOf(Vector, Frame)
    */
-  public Vector projectedCoordinatesOf(Vector point, Node frame) {
+  public Vector projectedCoordinatesOf(Vector point, Frame frame) {
     float xyz[] = new float[3];
 
     if (frame != null) {
@@ -1907,7 +1907,7 @@ public class Graph {
   /**
    * Convenience function that simply returns {@code unprojectedCoordinatesOf(point, null)}.
    * <p>
-   * #see {@link #unprojectedCoordinatesOf(Vector, Node)}
+   * #see {@link #unprojectedCoordinatesOf(Vector, Frame)}
    */
   public Vector unprojectedCoordinatesOf(Vector point) {
     return this.unprojectedCoordinatesOf(point, null);
@@ -1928,7 +1928,7 @@ public class Graph {
    * {@code frame} hierarchy (i.e., when {@link Frame#reference()} is non-null) is taken into
    * account.
    * <p>
-   * {@link #projectedCoordinatesOf(Vector, Node)} performs the inverse transformation.
+   * {@link #projectedCoordinatesOf(Vector, Frame)} performs the inverse transformation.
    * <p>
    * This method only uses the intrinsic eye parameters (view and projection matrices),
    * {@link #width()} and {@link #height()}). You can hence define a virtual eye and use
@@ -1938,11 +1938,11 @@ public class Graph {
    * change in the matrices, you should buffer the inverse of the projection times view matrix
    * to speed-up the queries. See {@link #cacheProjectionViewInverse(boolean)}.
    *
-   * @see #projectedCoordinatesOf(Vector, Node)
+   * @see #projectedCoordinatesOf(Vector, Frame)
    * @see #setWidth(int)
    * @see #setHeight(int)
    */
-  public Vector unprojectedCoordinatesOf(Vector pixel, Node frame) {
+  public Vector unprojectedCoordinatesOf(Vector pixel, Frame frame) {
     float xyz[] = new float[3];
     // _unproject(src.vec[0], src.vec[1], src.vec[2], this.getViewMatrix(true),
     // this.getProjectionMatrix(true),
@@ -2073,7 +2073,7 @@ public class Graph {
 
   /**
    * Sets the {@link #radius()} value in world units. Negative values are
-   * ignored. It also sets {@link Node#flySpeed()} to 1% of {@link #radius()}.
+   * ignored. It also sets {@link Frame#flySpeed()} to 1% of {@link #radius()}.
    */
   public void setRadius(float radius) {
     if (radius <= 0.0f) {
@@ -2108,7 +2108,7 @@ public class Graph {
    * it always is (0,0,-1).
    * <p>
    * Xhange this value using {@link #setViewDirection(Vector)}, {@link #lookAt(Vector)} or
-   * {@link Node#setOrientation(Quaternion)}. It is orthogonal to {@link #upVector()} and to
+   * {@link Frame#setOrientation(Quaternion)}. It is orthogonal to {@link #upVector()} and to
    * {@link #rightVector()}.
    */
   public Vector viewDirection() {
@@ -2119,7 +2119,7 @@ public class Graph {
    * Rotates the eye so that its {@link #viewDirection()} is {@code direction} (defined
    * in the world coordinate system).
    * <p>
-   * The eye {@link Node#position()} is not modified. The eye is rotated so that the
+   * The eye {@link Frame#position()} is not modified. The eye is rotated so that the
    * horizon (defined by its {@link #upVector()}) is preserved.
    *
    * @see #lookAt(Vector)
@@ -2164,7 +2164,7 @@ public class Graph {
    * same position on screen. This is especially useful when the eye is an observer of the
    * graph (default action binding).
    * <p>
-   * When {@code noMove} is true, the Eye {@link Node#position()} is left unchanged, which is
+   * When {@code noMove} is true, the Eye {@link Frame#position()} is left unchanged, which is
    * an intuitive behavior when the Eye is in first person mode.
    *
    * @see #lookAt(Vector)
@@ -2184,7 +2184,7 @@ public class Graph {
   /**
    * Returns the normalized up vector of the eye, defined in the world coordinate system.
    * <p>
-   * Set using {@link #setUpVector(Vector)} or {@link Node#setOrientation(Quaternion)}. It is
+   * Set using {@link #setUpVector(Vector)} or {@link Frame#setOrientation(Quaternion)}. It is
    * orthogonal to {@link #viewDirection()} and to {@link #rightVector()}.
    * <p>
    * It corresponds to the Y axis of the associated {@link #eye()} (actually returns
@@ -2196,8 +2196,8 @@ public class Graph {
 
   /**
    * 2D eyes simply call {@code frame().setPosition(target.x(), target.y())}. 3D
-   * eyes set {@link Node#orientation()}, so that it looks at point {@code target} defined
-   * in the world coordinate system (The eye {@link Node#position()} is not modified.
+   * eyes set {@link Frame#orientation()}, so that it looks at point {@code target} defined
+   * in the world coordinate system (The eye {@link Frame#position()} is not modified.
    * Simply {@link #setViewDirection(Vector)}).
    *
    * @see #at()
@@ -2219,7 +2219,7 @@ public class Graph {
    * <p>
    * This vector lies in the eye horizontal plane, directed along the X axis (orthogonal
    * to {@link #upVector()} and to {@link #viewDirection()}. Set using
-   * {@link #setUpVector(Vector)}, {@link #lookAt(Vector)} or {@link Node#setOrientation(Quaternion)}.
+   * {@link #setUpVector(Vector)}, {@link #lookAt(Vector)} or {@link Frame#setOrientation(Quaternion)}.
    * <p>
    * Simply returns {@code frame().xAxis()}.
    */
@@ -2241,7 +2241,7 @@ public class Graph {
 
   /**
    * Returns the {@link #eye()} {@link Interpolator} used by {@link #fitBallInterpolation()},
-   * {@link #fitScreenRegionInterpolation(Rectangle)}, {@link #interpolateTo(Node)}, etc.
+   * {@link #fitScreenRegionInterpolation(Rectangle)}, {@link #interpolateTo(Frame)}, etc.
    */
   public Interpolator interpolator() {
     return _interpolator;
@@ -2250,10 +2250,10 @@ public class Graph {
   /**
    * Convenience function that simply calls {@code interpolateTo(fr, 1)}.
    *
-   * @see #interpolateTo(Node, float)
+   * @see #interpolateTo(Frame, float)
    */
   //TODO needs testing, e.g., setAvatar
-  public void interpolateTo(Node frame) {
+  public void interpolateTo(Frame frame) {
     interpolateTo(frame, 1);
   }
 
@@ -2264,10 +2264,10 @@ public class Graph {
    * {@code frame} is expressed in world coordinates. {@code duration} tunes the
    * interpolation speed.
    *
-   * @see #interpolateTo(Node)
+   * @see #interpolateTo(Frame)
    * @see #fitBallInterpolation()
    */
-  public void interpolateTo(Node frame, float duration) {
+  public void interpolateTo(Frame frame, float duration) {
     _interpolator.stop();
     _interpolator.clear();
     _interpolator.addKeyFrame(eye().detach());
@@ -2288,7 +2288,7 @@ public class Graph {
    * fitted.
    */
   public void fitScreenRegionInterpolation(Rectangle rectangle) {
-    Node eye = eye();
+    Frame eye = eye();
     _interpolator.stop();
     _interpolator.clear();
     _interpolator.addKeyFrame(eye().detach());
@@ -2308,7 +2308,7 @@ public class Graph {
    * The {@link Frame#orientation()} of the {@link #eye()} is not modified.
    */
   public void fitBallInterpolation() {
-    Node eye = eye();
+    Frame eye = eye();
     _interpolator.stop();
     _interpolator.clear();
     _interpolator.addKeyFrame(eye().detach());
@@ -2336,7 +2336,7 @@ public class Graph {
    * visible and fits the window.
    * <p>
    * In 3D the eye is simply translated along its {@link #viewDirection()} so that the
-   * sphere fits the screen. Its {@link Node#orientation()} and its
+   * sphere fits the screen. Its {@link Frame#orientation()} and its
    * {@link #fieldOfView()} are unchanged. You should therefore orientate the eye
    * before you call this method.
    *
@@ -2381,7 +2381,7 @@ public class Graph {
    * Moves the eye so that the rectangular screen region defined by {@code rectangle}
    * (pixel units, with origin in the upper left corner) fits the screen.
    * <p>
-   * in 3D the eye is translated (its {@link Node#orientation()} is unchanged) so that
+   * in 3D the eye is translated (its {@link Frame#orientation()} is unchanged) so that
    * {@code rectangle} is entirely visible. Since the pixel coordinates only define a
    * <i>frustum</i> in 3D, it's the intersection of this frustum with a plane (orthogonal
    * to the {@link #viewDirection()} and passing through the {@link #center()}) that
@@ -2510,9 +2510,9 @@ public class Graph {
    * represent the frame hierarchy: {@code leftArm} and {@code rightArm} are both
    * correctly drawn with respect to the {@code body} coordinate system.
    *
-   * @see #applyWorldTransformation(Node)
+   * @see #applyWorldTransformation(Frame)
    */
-  public void applyTransformation(Node frame) {
+  public void applyTransformation(Frame frame) {
     if (is2D()) {
       matrixHandler().translate(frame.translation().x(), frame.translation().y());
       matrixHandler().rotate(frame.rotation().angle2D());
@@ -2525,11 +2525,11 @@ public class Graph {
   }
 
   /**
-   * Same as {@link #applyTransformation(Node)}, but applies the global transformation
+   * Same as {@link #applyTransformation(Frame)}, but applies the global transformation
    * defined by the frame.
    */
-  public void applyWorldTransformation(Node frame) {
-    Node reference = frame.reference();
+  public void applyWorldTransformation(Frame frame) {
+    Frame reference = frame.reference();
     if (reference != null) {
       applyWorldTransformation(reference);
       applyTransformation(frame);
@@ -2594,7 +2594,7 @@ public class Graph {
   }
 
   /**
-   * Max between {@link Node#lastUpdate()} and {@link #_lastNonEyeUpdate()}.
+   * Max between {@link Frame#lastUpdate()} and {@link #_lastNonEyeUpdate()}.
    *
    * @return last frame the eye was updated
    * @see #_lastNonEyeUpdate()

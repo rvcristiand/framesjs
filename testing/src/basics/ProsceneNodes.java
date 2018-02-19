@@ -1,6 +1,6 @@
 package basics;
 
-import common.InteractiveNode;
+import common.InteractiveFrame;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import frames.core.Graph;
@@ -11,7 +11,7 @@ import frames.processing.Shape;
 
 public class ProsceneNodes extends PApplet {
   Scene scene;
-  INode node;
+  IFrame node;
 
   public void settings() {
     size(800, 800, P3D);
@@ -19,15 +19,15 @@ public class ProsceneNodes extends PApplet {
 
   public void setup() {
     scene = new Scene(this);
-    InteractiveNode eye = new InteractiveNode(scene);
+    InteractiveFrame eye = new InteractiveFrame(scene);
     scene.setEye(eye);
     //interactivity defaults to the eye
     scene.setDefaultNode(eye);
     scene.setRadius(200);
     scene.fitBallInterpolation();
 
-    node = new INode();
-    //node.setPrecision(Node.Precision.FIXED);
+    node = new IFrame();
+    //frame.setPrecision(Frame.Precision.FIXED);
   }
 
   public void draw() {
@@ -45,13 +45,13 @@ public class ProsceneNodes extends PApplet {
 
   }
 
-  public class INode extends Shape {
+  public class IFrame extends Shape {
     Shortcut left = new Shortcut(PApplet.LEFT);
     Shortcut right = new Shortcut(PApplet.RIGHT);
     Shortcut wheel = new Shortcut(processing.event.MouseEvent.WHEEL);
 
     //button dimensions
-    public INode() {
+    public IFrame() {
       super(scene);
     }
 

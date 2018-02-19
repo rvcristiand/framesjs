@@ -1,6 +1,6 @@
 package demos;
 
-import common.InteractiveNode;
+import common.InteractiveFrame;
 import processing.core.PApplet;
 import frames.processing.Scene;
 
@@ -14,7 +14,7 @@ public class Luxo extends PApplet {
 
   public void setup() {
     scene = new Scene(this);
-    InteractiveNode eye = new InteractiveNode(scene);
+    InteractiveFrame eye = new InteractiveFrame(scene);
     scene.setEye(eye);
     scene.setFieldOfView(PI / 3);
     //interactivity defaults to the eye

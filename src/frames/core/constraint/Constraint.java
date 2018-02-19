@@ -10,7 +10,7 @@
 
 package frames.core.constraint;
 
-import frames.core.Node;
+import frames.core.Frame;
 import frames.primitives.Quaternion;
 import frames.primitives.Vector;
 
@@ -21,9 +21,9 @@ import frames.primitives.Vector;
  * Constraint</a>.
  * <p>
  * This class defines the interface for the constraint that can be applied to a Frame to
- * limit its motion. Use {@link Node#setConstraint(Constraint)}
+ * limit its motion. Use {@link Frame#setConstraint(Constraint)}
  * to associate a Constraint to a Frame (default is a {@code null}
- * {@link Node#constraint()}.
+ * {@link Frame#constraint()}.
  */
 public abstract class Constraint {
   /**
@@ -33,14 +33,14 @@ public abstract class Constraint {
    * Overload this method in your own Constraint class to define a new translation
    * constraint. {@code frame} is the Frame to which is applied the translation. You
    * should refrain from directly changing its value in the constraint. Use its
-   * {@link Node#position()} and update the translation
+   * {@link Frame#position()} and update the translation
    * accordingly instead.
    * <p>
    * {@code translation} is expressed in the local Frame coordinate system. Use
-   * {@link Node#inverseTransformOf(Vector)} to express it in the
+   * {@link Frame#inverseTransformOf(Vector)} to express it in the
    * world coordinate system if needed.
    */
-  public Vector constrainTranslation(Vector translation, Node frame) {
+  public Vector constrainTranslation(Vector translation, Frame frame) {
     return translation.get();
   }
 
@@ -49,13 +49,13 @@ public abstract class Constraint {
    * empty (no filtering).
    * <p>
    * Overload this method in your own Constraint class to define a new rotation
-   * constraint. See {@link #constrainTranslation(Vector, Node)} for details.
+   * constraint. See {@link #constrainTranslation(Vector, Frame)} for details.
    * <p>
-   * Use {@link Node#inverseTransformOf(Vector)} on the
+   * Use {@link Frame#inverseTransformOf(Vector)} on the
    * {@code rotation} {@link Quaternion#axis()} to express
    * {@code rotation} in the world coordinate system if needed.
    */
-  public Quaternion constrainRotation(Quaternion rotation, Node frame) {
+  public Quaternion constrainRotation(Quaternion rotation, Frame frame) {
     return rotation.get();
   }
 }

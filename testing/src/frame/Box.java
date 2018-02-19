@@ -1,8 +1,8 @@
 package frame;
 
-import common.InteractiveNode;
+import common.InteractiveFrame;
 import processing.core.PApplet;
-import frames.core.Node;
+import frames.core.Frame;
 import frames.primitives.Quaternion;
 import frames.primitives.Vector;
 import frames.processing.Scene;
@@ -12,14 +12,14 @@ import frames.processing.Scene;
  */
 public class Box {
   Scene scene;
-  public Node iFrame;
+  public Frame iFrame;
   float w, h, d;
   int c;
 
   public Box(Scene scn) {
     scene = scn;
-    iFrame = new InteractiveNode(scene);
-    iFrame.setPrecision(Node.Precision.ADAPTIVE);
+    iFrame = new InteractiveFrame(scene);
+    iFrame.setPrecision(Frame.Precision.ADAPTIVE);
     iFrame.setPrecisionThreshold(25);
     setSize();
     setColor();

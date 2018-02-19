@@ -10,7 +10,7 @@
 
 package frames.core.constraint;
 
-import frames.core.Node;
+import frames.core.Frame;
 import frames.primitives.Quaternion;
 import frames.primitives.Vector;
 
@@ -19,7 +19,7 @@ import frames.primitives.Vector;
  * <p>
  * The {@link #translationConstraintDirection()} and
  * {@link #rotationConstraintDirection()} are expressed in the Frame local coordinate
- * system (see {@link Node#reference()} ).
+ * system (see {@link Frame#reference()} ).
  */
 public class LocalConstraint extends AxisPlaneConstraint {
   /**
@@ -28,7 +28,7 @@ public class LocalConstraint extends AxisPlaneConstraint {
    * {@link #translationConstraintDirection()}.
    */
   @Override
-  public Vector constrainTranslation(Vector translation, Node frame) {
+  public Vector constrainTranslation(Vector translation, Frame frame) {
     Vector res = new Vector(translation._vector[0], translation._vector[1], translation._vector[2]);
     Vector proj;
     switch (translationConstraintType()) {
@@ -57,7 +57,7 @@ public class LocalConstraint extends AxisPlaneConstraint {
    * system by {@link #rotationConstraintDirection()}.
    */
   @Override
-  public Quaternion constrainRotation(Quaternion rotation, Node frame) {
+  public Quaternion constrainRotation(Quaternion rotation, Frame frame) {
     Quaternion res = rotation.get();
     switch (rotationConstraintType()) {
       case FREE:

@@ -1,8 +1,8 @@
 package frame;
 
+import frames.core.Frame;
 import processing.core.PApplet;
 import frames.core.Graph;
-import frames.core.Node;
 import frames.input.Shortcut;
 import frames.input.event.KeyEvent;
 import frames.input.event.KeyShortcut;
@@ -12,7 +12,7 @@ import frames.processing.Scene;
 
 public class FirstPerson extends PApplet {
   Scene scene;
-  Node iFrame;
+  Frame iFrame;
 
   @Override
   public void settings() {
@@ -22,7 +22,7 @@ public class FirstPerson extends PApplet {
   @Override
   public void setup() {
     scene = new Scene(this);
-    iFrame = new Node(scene) {
+    iFrame = new Frame(scene) {
       @Override
       public void interact(MotionEvent event) {
         switch (event.shortcut().id()) {
@@ -80,10 +80,10 @@ public class FirstPerson extends PApplet {
 
   public void keyPressed() {
     if (key == 'i')
-      scene.inputHandler().shiftDefaultGrabber((Node) scene.eye(), iFrame);
+      scene.inputHandler().shiftDefaultGrabber((Frame) scene.eye(), iFrame);
   }
 
-  public class InteractiveFrame extends Node {
+  public class InteractiveFrame extends Frame {
     Shortcut left = new Shortcut(PApplet.LEFT);
     Shortcut right = new Shortcut(PApplet.RIGHT);
     Shortcut wheel = new Shortcut(processing.event.MouseEvent.WHEEL);

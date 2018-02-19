@@ -109,7 +109,7 @@ import java.util.List;
  */
 
 /**
- * A Node is a {@link Frame} element on a {@link Graph} hierarchy, which converts user gestures
+ * A Frame is a {@link Frame} element on a {@link Graph} hierarchy, which converts user gestures
  * into translation, rotation and scaling updates (see {@link #translationSensitivity()},
  * {@link #rotationSensitivity()} and {@link #scalingSensitivity()}). A node may be attached
  * to some of your visual objects to control their behavior using an {@link Agent}.
@@ -121,7 +121,7 @@ import java.util.List;
  * <p>
  * {@code // Builds a node located at (0,0,0) with an identity orientation (node and
  * world axes match)} <br>
- * {@code Node node = new Node(graph);} <br>
+ * {@code Frame node = new Frame(graph);} <br>
  * {@code graph.pushModelView();} <br>
  * {@code node.applyWorldTransformation(); //same as graph.applyModelView(node.matrix());} <br>
  * {@code // Draw your object here, in the local coordinate system.} <br>
@@ -133,7 +133,7 @@ import java.util.List;
  * <p>
  * <pre>
  * {@code
- * node = new Node(graph) {
+ * node = new Frame(graph) {
  *   public void visit() {
  *     //hierarchical culling is optional and disabled by default
  *     cull(cullingCondition);
@@ -150,7 +150,7 @@ import java.util.List;
  * {@link #cull(boolean)}.
  * <p>
  * A node may also be defined as the {@link Graph#eye()} (see {@link #isEye()}
- * and {@link Graph#setEye(Node)}). Some user gestures are then interpreted in a negated way,
+ * and {@link Graph#setEye(Frame)}). Some user gestures are then interpreted in a negated way,
  * respect to non-eye nodes. For instance, with a move-to-the-right user gesture the
  * {@link Graph#eye()} has to go to the <i>left</i>, so that the scene seems to move
  * to the right.
@@ -162,7 +162,7 @@ import java.util.List;
  * {@code
  * Shortcut left = new Shortcut(PApplet.LEFT);
  * Shortcut right = new Shortcut(PApplet.RIGHT);
- * node = new Node(graph) {
+ * node = new Frame(graph) {
  *   public void interact(Event event) {
  *     if(left.matches(event.shortcut()))
  *       rotate(event);
@@ -183,19 +183,19 @@ import java.util.List;
  * Picking a node is done accordingly to a {@link #precision()}. Refer to
  * {@link #setPrecision(Precision)} for details.
  * <h2>Syncing</h2>
- * Two nodes can be synced together ({@link #sync(Node, Node)}), meaning that they will
+ * Two nodes can be synced together ({@link #sync(Frame, Frame)}), meaning that they will
  * share their global parameters (position, orientation and magnitude) taken the one
  * that hasGrabber been most recently updated. Syncing can be useful to share nodes
  * among different off-screen graphs.
  */
-public class Node implements Grabber {
+public class Frame implements Grabber {
   /**
    * Returns whether or not this frame matches other taking into account the {@link #translation()},
    * {@link #rotation()} and {@link #scaling()} frame parameters, but not its {@link #reference()}.
    *
    * @param other frame
    */
-  public boolean matches(Node other) {
+  public boolean matches(Frame other) {
     return translation().matches(other.translation()) && rotation().matches(other.rotation()) && scaling() == other.scaling();
   }
 
@@ -203,7 +203,7 @@ public class Node implements Grabber {
   protected Vector _translation;
   protected float _scaling;
   protected Quaternion _rotation;
-  protected Node _reference;
+  protected Frame _reference;
   protected Constraint _constraint;
   protected long _lastUpdate;
 
@@ -266,23 +266,23 @@ public class Node implements Grabber {
   protected MotionEvent2 _initEvent;
   protected float _flySpeedCache;
 
-  protected List<Node> _children;
+  protected List<Frame> _children;
 
   /**
    * Same as {@code this(graph, null, new Vector(), new Quaternion(), 1)}.
    *
-   * @see #Node(Graph, Node, Vector, Quaternion, float)
+   * @see #Frame(Graph, Frame, Vector, Quaternion, float)
    */
-  public Node(Graph graph) {
+  public Frame(Graph graph) {
     this(graph, null, new Vector(), new Quaternion(), 1);
   }
 
   /**
    * Same as {@code this(reference.graph(), reference, new Vector(), new Quaternion(), 1)}.
    *
-   * @see #Node(Graph, Node, Vector, Quaternion, float)
+   * @see #Frame(Graph, Frame, Vector, Quaternion, float)
    */
-  public Node(Node reference) {
+  public Frame(Frame reference) {
     this(reference.graph(), reference, new Vector(), new Quaternion(), 1);
   }
 
@@ -303,7 +303,7 @@ public class Node implements Grabber {
    * <p>
    * After object creation a call to {@link #isEye()} will return {@code false}.
    */
-  protected Node(Graph graph, Node reference, Vector translation, Quaternion rotation, float scaling) {
+  protected Frame(Graph graph, Frame reference, Vector translation, Quaternion rotation, float scaling) {
     setTranslation(translation);
     setRotation(rotation);
     setScaling(scaling);
@@ -332,7 +332,7 @@ public class Node implements Grabber {
     setFlySpeed(0.01f * graph().radius());
     _upVector = new Vector(0.0f, 1.0f, 0.0f);
     _culled = false;
-    _children = new ArrayList<Node>();
+    _children = new ArrayList<Frame>();
     // graph()._addLeadingNode(this);
     setReference(reference());// _restorePath seems more robust
     setRotationSensitivity(1.0f);
@@ -363,7 +363,7 @@ public class Node implements Grabber {
     setFlySpeed(0.01f * graph().radius());
   }
 
-  protected Node(Graph graph, Node other) {
+  protected Frame(Graph graph, Frame other) {
     _translation = other.translation().get();
     _rotation = other.rotation().get();
     _scaling = other.scaling();
@@ -387,7 +387,7 @@ public class Node implements Grabber {
     this._upVector = other._upVector.get();
     this._culled = other._culled;
 
-    this._children = new ArrayList<Node>();
+    this._children = new ArrayList<Frame>();
     if (this.graph() == other.graph()) {
       this.setReference(reference());// _restorePath
     }
@@ -444,19 +444,19 @@ public class Node implements Grabber {
    *
    * @return node copy
    */
-  public Node get() {
-    return new Node(this.graph(), this);
+  public Frame get() {
+    return new Frame(this.graph(), this);
   }
 
   // detached frames
 
-  public Node(Vector translation, Quaternion rotation, float scaling) {
+  public Frame(Vector translation, Quaternion rotation, float scaling) {
     this(null, null, translation, rotation, scaling);
   }
 
   //TODO prefix these two with _
-  public Node detach() {
-    return new Node(null, null, this.position(), this.orientation(), this.magnitude());
+  public Frame detach() {
+    return new Frame(null, null, this.position(), this.orientation(), this.magnitude());
   }
 
   public boolean isDetached() {
@@ -512,8 +512,8 @@ public class Node implements Grabber {
    *
    * @see #randomize(Vector, float)
    */
-  public static Node random(Graph graph, Vector center, float radius) {
-    Node frame = new Node(graph);
+  public static Frame random(Graph graph, Vector center, float radius) {
+    Frame frame = new Frame(graph);
     Vector displacement = Vector.random();
     displacement.setMagnitude(radius);
     frame.setPosition(Vector.add(center, displacement));
@@ -529,7 +529,7 @@ public class Node implements Grabber {
    *
    * @see #randomize()
    */
-  public static Node random(Graph graph) {
+  public static Frame random(Graph graph) {
     return random(graph, graph.center(), graph.radius());
   }
 
@@ -778,17 +778,17 @@ public class Node implements Grabber {
   /**
    * Applies a {@code rotation} (to this frame) around the {@code frame} param.
    */
-  public void rotateAroundFrame(Quaternion rotation, Node frame) {
+  public void rotateAroundFrame(Quaternion rotation, Frame frame) {
     Vector euler = rotation.eulerAngles();
     rotateAroundFrame(euler.x(), euler.y(), euler.z(), frame);
   }
 
   /*
-  public void rotateAroundFrame(float roll, float pitch, float yaw, Node frame) {
+  public void rotateAroundFrame(float roll, float pitch, float yaw, Frame frame) {
     //TODO check with other version!!!
     if (frame != null) {
-      Node rotateAroundFrameCopy = frame.get();
-      Node thisFrameCopy = get();
+      Frame rotateAroundFrameCopy = frame.get();
+      Frame thisFrameCopy = get();
       thisFrameCopy.setReference(rotateAroundFrameCopy);
       thisFrameCopy.setWorldMatrix(this);
       rotateAroundFrameCopy.rotate(new Quaternion(roll, pitch, yaw));
@@ -802,10 +802,10 @@ public class Node implements Grabber {
    * Applies the rotation (to this frame) defined by the Euler angles
    * around the {@code frame} param.
    */
-  public void rotateAroundFrame(float roll, float pitch, float yaw, Node frame) {
+  public void rotateAroundFrame(float roll, float pitch, float yaw, Frame frame) {
     if (frame != null) {
-      Node axis = frame.detach();
-      Node copy = detach();
+      Frame axis = frame.detach();
+      Frame copy = detach();
       copy.setReference(axis);
       //copy.setWorldMatrix(this);
       axis.rotate(new Quaternion(_graph.isLeftHanded() ? -roll : roll, pitch, _graph.isLeftHanded() ? -yaw : yaw));
@@ -825,7 +825,7 @@ public class Node implements Grabber {
    */
   public Quaternion orientation() {
     Quaternion quaternion = rotation().get();
-    Node reference = reference();
+    Frame reference = reference();
     while (reference != null) {
       quaternion = Quaternion.compose(reference.rotation(), quaternion);
       reference = reference.reference();
@@ -916,7 +916,7 @@ public class Node implements Grabber {
    * {@link #reference()}).
    */
   public void setMagnitude(float magnitude) {
-    Node reference = reference();
+    Frame reference = reference();
     if (reference != null)
       setScaling(magnitude / reference.magnitude());
     else
@@ -928,14 +928,14 @@ public class Node implements Grabber {
   /**
    * Convenience function that simply calls {@code alignWithFrame(frame, false, 0.85f)}
    */
-  public void alignWithFrame(Node frame) {
+  public void alignWithFrame(Frame frame) {
     alignWithFrame(frame, false, 0.85f);
   }
 
   /**
    * Convenience function that simply calls {@code alignWithFrame(frame, move, 0.85f)}
    */
-  public void alignWithFrame(Node frame, boolean move) {
+  public void alignWithFrame(Frame frame, boolean move) {
     alignWithFrame(frame, move, 0.85f);
   }
 
@@ -943,7 +943,7 @@ public class Node implements Grabber {
    * Convenience function that simply calls
    * {@code alignWithFrame(frame, false, threshold)}
    */
-  public void alignWithFrame(Node frame, float threshold) {
+  public void alignWithFrame(Frame frame, float threshold) {
     alignWithFrame(frame, false, threshold);
   }
 
@@ -969,7 +969,7 @@ public class Node implements Grabber {
    * {@code frame} may be {@code null} and then represents the world coordinate system
    * (same convention than for the {@link #reference()}).
    */
-  public void alignWithFrame(Node frame, boolean move, float threshold) {
+  public void alignWithFrame(Frame frame, boolean move, float threshold) {
     Vector[][] directions = new Vector[2][3];
 
     for (int d = 0; d < 3; ++d) {
@@ -998,7 +998,7 @@ public class Node implements Grabber {
         }
       }
     }
-    Node old = detach(); // correct line
+    Frame old = detach(); // correct line
     // VFrame old = this.get();// this call the get overloaded method and
     // hence addGrabber the frame to the mouse _grabber
 
@@ -1229,9 +1229,9 @@ public class Node implements Grabber {
    * <p>
    * <b>Attention:</b> In Processing this technique is inefficient because
    * {@code papplet.applyMatrix} will try to calculate the inverse of the transform.
-   * Use {@link frames.core.Graph#applyTransformation(Node)} instead.
+   * Use {@link frames.core.Graph#applyTransformation(Frame)} instead.
    *
-   * @see #setMatrix(Node)
+   * @see #setMatrix(Frame)
    * @see #worldMatrix()
    * @see #view()
    */
@@ -1279,13 +1279,13 @@ public class Node implements Grabber {
    * {@link #reference()}). These two match when the {@link #reference()} is
    * {@code null}.
    *
-   * @see #setWorldMatrix(Node)
+   * @see #setWorldMatrix(Frame)
    * @see #matrix()
    * @see #view()
    */
   public Matrix worldMatrix() {
     if (reference() != null)
-      return new Node(position(), orientation(), magnitude()).matrix();
+      return new Frame(position(), orientation(), magnitude()).matrix();
     else
       return matrix();
   }
@@ -1300,8 +1300,8 @@ public class Node implements Grabber {
    *
    * @see #matrix()
    * @see #worldMatrix()
-   * @see #setMatrix(Node)
-   * @see #setWorldMatrix(Node)
+   * @see #setMatrix(Frame)
+   * @see #setWorldMatrix(Frame)
    */
   public Matrix view() {
     Matrix view = new Matrix();
@@ -1427,9 +1427,9 @@ public class Node implements Grabber {
    * return {@code true}.
    *
    * @see #worldMatrix()
-   * @see #setMatrix(Node)
+   * @see #setMatrix(Frame)
    */
-  public void setWorldMatrix(Node other) {
+  public void setWorldMatrix(Frame other) {
     if (other == null)
       return;
     setPosition(other.position());
@@ -1442,9 +1442,9 @@ public class Node implements Grabber {
    * those of the {@code other} frame.
    *
    * @see #matrix()
-   * @see #setWorldMatrix(Node)
+   * @see #setWorldMatrix(Frame)
    */
-  public void setMatrix(Node other) {
+  public void setMatrix(Frame other) {
     if (other == null)
       return;
     setTranslation(other.translation());
@@ -1473,8 +1473,8 @@ public class Node implements Grabber {
    *
    * @see #worldInverse()
    */
-  public Node inverse() {
-    Node frame = new Node(graph());
+  public Frame inverse() {
+    Frame frame = new Frame(graph());
     frame.setTranslation(Vector.multiply(rotation().inverseRotate(translation()), -1));
     frame.setRotation(rotation().inverse());
     frame.setScaling(1 / scaling());
@@ -1499,8 +1499,8 @@ public class Node implements Grabber {
    *
    * @see #inverse()
    */
-  public Node worldInverse() {
-    Node frame = new Node(graph());
+  public Frame worldInverse() {
+    Frame frame = new Frame(graph());
     frame.setTranslation(Vector.multiply(orientation().inverseRotate(position()), -1));
     frame.setRotation(orientation().inverse());
     frame.setScaling(1 / magnitude());
@@ -1513,9 +1513,9 @@ public class Node implements Grabber {
    * Returns the frame coordinates of the point whose position in the {@code from}
    * coordinate system is {@code src} (converts from {@code from} to this frame).
    * <p>
-   * {@link #coordinatesOfIn(Vector, Node)} performs the inverse transformation.
+   * {@link #coordinatesOfIn(Vector, Frame)} performs the inverse transformation.
    */
-  public Vector coordinatesOfFrom(Vector src, Node from) {
+  public Vector coordinatesOfFrom(Vector src, Frame from) {
     if (this == from)
       return src;
     else if (reference() != null)
@@ -1528,10 +1528,10 @@ public class Node implements Grabber {
    * Returns the {@code in} coordinates of the point whose position in the frame
    * coordinate system is {@code src} (converts from this frame to {@code in}).
    * <p>
-   * {@link #coordinatesOfFrom(Vector, Node)} performs the inverse transformation.
+   * {@link #coordinatesOfFrom(Vector, Frame)} performs the inverse transformation.
    */
-  public Vector coordinatesOfIn(Vector vector, Node in) {
-    Node fr = this;
+  public Vector coordinatesOfIn(Vector vector, Frame in) {
+    Frame fr = this;
     Vector res = vector;
     while ((fr != null) && (fr != in)) {
       res = fr.localInverseCoordinatesOf(res);
@@ -1580,9 +1580,9 @@ public class Node implements Grabber {
    * Returns the frame transform of the vector whose coordinates in the {@code from}
    * coordinate system is {@code src} (converts vectors from {@code from} to this frame).
    * <p>
-   * {@link #transformOfIn(Vector, Node)} performs the inverse transformation.
+   * {@link #transformOfIn(Vector, Frame)} performs the inverse transformation.
    */
-  public Vector transformOfFrom(Vector vector, Node from) {
+  public Vector transformOfFrom(Vector vector, Frame from) {
     if (this == from)
       return vector;
     else if (reference() != null)
@@ -1595,10 +1595,10 @@ public class Node implements Grabber {
    * Returns the {@code in} transform of the vector whose coordinates in the frame
    * coordinate system is {@code src} (converts vectors from this frame to {@code in}).
    * <p>
-   * {@link #transformOfFrom(Vector, Node)} performs the inverse transformation.
+   * {@link #transformOfFrom(Vector, Frame)} performs the inverse transformation.
    */
-  public Vector transformOfIn(Vector vector, Node in) {
-    Node fr = this;
+  public Vector transformOfIn(Vector vector, Frame in) {
+    Frame fr = this;
     Vector res = vector;
     while ((fr != null) && (fr != in)) {
       res = fr.localInverseTransformOf(res);
@@ -1633,7 +1633,7 @@ public class Node implements Grabber {
    * {@link #inverseTransformOf(Vector)} to transform vectors instead of coordinates.
    */
   public Vector inverseCoordinatesOf(Vector vector) {
-    Node fr = this;
+    Frame fr = this;
     Vector res = vector;
     while (fr != null) {
       res = fr.localInverseCoordinatesOf(res);
@@ -1665,7 +1665,7 @@ public class Node implements Grabber {
    * {@link #inverseCoordinatesOf(Vector)} to transform coordinates instead of vectors.
    */
   public Vector inverseTransformOf(Vector vector) {
-    Node fr = this;
+    Frame fr = this;
     Vector res = vector;
     while (fr != null) {
       res = fr.localInverseTransformOf(res);
@@ -1707,7 +1707,7 @@ public class Node implements Grabber {
   protected void _modified() {
     _lastUpdate = TimingHandler.frameCount;
     if (children() != null)
-      for (Node child : children())
+      for (Frame child : children())
         child._modified();
   }
 
@@ -1716,15 +1716,15 @@ public class Node implements Grabber {
   /**
    * Same as {@code sync(this, other)}.
    *
-   * @see #sync(Node, Node)
+   * @see #sync(Frame, Frame)
    */
-  public void sync(Node other) {
+  public void sync(Frame other) {
     sync(this, other);
   }
 
   /**
-   * If {@code node1} has been more recently updated than {@code node2}, calls
-   * {@code node2.setWorldMatrix(node1)}, otherwise calls {@code node1.setWorldMatrix(node2)}.
+   * If {@code frame1} has been more recently updated than {@code frame2}, calls
+   * {@code frame2.setWorldMatrix(frame1)}, otherwise calls {@code frame1.setWorldMatrix(frame2)}.
    * Does nothing if both objects were updated at the same frame.
    * <p>
    * This method syncs only the global geometry attributes ({@link #position()},
@@ -1732,15 +1732,15 @@ public class Node implements Grabber {
    * {@link #reference()} and {@link #constraint()} (if any) of each node are kept
    * separately.
    *
-   * @see #setWorldMatrix(Node)
+   * @see #setWorldMatrix(Frame)
    */
-  public static void sync(Node node1, Node node2) {
-    if (node1 == null || node2 == null)
+  public static void sync(Frame frame1, Frame frame2) {
+    if (frame1 == null || frame2 == null)
       return;
-    if (node1.lastUpdate() == node2.lastUpdate())
+    if (frame1.lastUpdate() == frame2.lastUpdate())
       return;
-    Node source = (node1.lastUpdate() > node2.lastUpdate()) ? node1 : node2;
-    Node target = (node1.lastUpdate() > node2.lastUpdate()) ? node2 : node1;
+    Frame source = (frame1.lastUpdate() > frame2.lastUpdate()) ? frame1 : frame2;
+    Frame target = (frame1.lastUpdate() > frame2.lastUpdate()) ? frame2 : frame1;
     target.setWorldMatrix(source);
   }
 
@@ -1766,16 +1766,16 @@ public class Node implements Grabber {
    * expressed in the world coordinate system. The values match when the reference frame
    * is {@code null}.
    * <p>
-   * Use {@link #setReference(Node)} to set this value and create a frame hierarchy.
+   * Use {@link #setReference(Frame)} to set this value and create a frame hierarchy.
    * Convenient functions allow you to convert coordinates from one frame to another: see
    * {@link #coordinatesOf(Vector)}, {@link #localCoordinatesOf(Vector)} ,
-   * {@link #coordinatesOfIn(Vector, Node)} and their inverse functions.
+   * {@link #coordinatesOfIn(Vector, Frame)} and their inverse functions.
    * <p>
    * Vectors can also be converted using {@link #transformOf(Vector)},
-   * {@link #transformOfIn(Vector, Node)}, {@link #localTransformOf(Vector)} and their inverse
+   * {@link #transformOfIn(Vector, Frame)}, {@link #localTransformOf(Vector)} and their inverse
    * functions.
    */
-  public Node reference() {
+  public Frame reference() {
     return _reference;
   }
 
@@ -1793,13 +1793,13 @@ public class Node implements Grabber {
    * {@link #reference()}). No action is performed if setting {@code reference} as the
    * {@link #reference()} would create a loop in the hierarchy.
    */
-  public void setReference(Node node) {
-    if (settingAsReferenceWillCreateALoop(node)) {
+  public void setReference(Frame frame) {
+    if (settingAsReferenceWillCreateALoop(frame)) {
       System.out.println("Frame.setReference would create a loop in Frame hierarchy. Nothing done.");
       return;
     }
     // 1. no need to re-parent, just check this needs to be added as leadingFrame
-    if (reference() == node) {
+    if (reference() == frame) {
       _restorePath(reference(), this);
       return;
     }
@@ -1810,13 +1810,13 @@ public class Node implements Grabber {
     else if (graph() != null)
       graph()._removeLeadingNode(this);
     // finally assign the reference frame
-    _reference = node;// reference() returns now the new value
+    _reference = frame;// reference() returns now the new value
     // 2b. after assigning new reference frame
     _restorePath(reference(), this);
     _modified();
   }
 
-  protected void _restorePath(Node parent, Node child) {
+  protected void _restorePath(Frame parent, Frame child) {
     if (parent == null) {
       if (graph() != null)
         graph()._addLeadingNode(child);
@@ -1832,8 +1832,8 @@ public class Node implements Grabber {
    * Returns {@code true} if setting {@code frame} as the frame's
    * {@link #reference()} would create a loop in the frame hierarchy.
    */
-  public boolean settingAsReferenceWillCreateALoop(Node frame) {
-    Node f = frame;
+  public boolean settingAsReferenceWillCreateALoop(Frame frame) {
+    Frame f = frame;
     while (f != null) {
       if (f == this)
         return true;
@@ -1845,26 +1845,26 @@ public class Node implements Grabber {
   /**
    * Returns a list of the node children, i.e., nodes which {@link #reference()} is this.
    */
-  public List<Node> children() {
+  public List<Frame> children() {
     return _children;
   }
 
-  protected boolean _addChild(Node node) {
-    if (node == null)
+  protected boolean _addChild(Frame frame) {
+    if (frame == null)
       return false;
-    if (_hasChild(node))
+    if (_hasChild(frame))
       return false;
-    return children().add(node);
+    return children().add(frame);
   }
 
   /**
-   * Removes the leading node if present. Typically used when re-parenting the node.
+   * Removes the leading frame if present. Typically used when re-parenting the frame.
    */
-  protected boolean _removeChild(Node node) {
+  protected boolean _removeChild(Frame frame) {
     boolean result = false;
-    Iterator<Node> it = children().iterator();
+    Iterator<Frame> it = children().iterator();
     while (it.hasNext()) {
-      if (it.next() == node) {
+      if (it.next() == frame) {
         it.remove();
         result = true;
         break;
@@ -1873,8 +1873,8 @@ public class Node implements Grabber {
     return result;
   }
 
-  protected boolean _hasChild(Node node) {
-    for (Node frame : children())
+  protected boolean _hasChild(Frame node) {
+    for (Frame frame : children())
       if (frame == node)
         return true;
     return false;
@@ -1889,7 +1889,7 @@ public class Node implements Grabber {
    * <p>
    * <pre>
    * {@code
-   * node = new Node(graph) {
+   * node = new Frame(graph) {
    *   public void visit() {
    *     //hierarchical culling is optional and disabled by default
    *     cull(cullingCondition);
@@ -1950,7 +1950,7 @@ public class Node implements Grabber {
   /**
    * Returns true if this node is the {@link Graph#eye()}, and false otherwise.
    *
-   * @see Graph#setEye(Node)
+   * @see Graph#setEye(Frame)
    * @see Graph#eye()
    */
   public boolean isEye() {
@@ -2157,7 +2157,7 @@ public class Node implements Grabber {
    *
    * @see #applyTransformation()
    * @see #matrix()
-   * @see Graph#applyTransformation(Node)
+   * @see Graph#applyTransformation(Frame)
    */
   public void applyTransformation(Graph graph) {
     graph.applyTransformation(this);
@@ -2170,7 +2170,7 @@ public class Node implements Grabber {
    *
    * @see #applyWorldTransformation()
    * @see #worldMatrix()
-   * @see Graph#applyWorldTransformation(Node)
+   * @see Graph#applyWorldTransformation(Frame)
    */
   public void applyWorldTransformation(Graph graph) {
     graph.applyWorldTransformation(this);
@@ -2399,7 +2399,7 @@ public class Node implements Grabber {
    * to change this value.
    * <p>
    * The {@link #spinningQuaternion()} axis is defined in the node coordinate
-   * system. You can use {@link #transformOfFrom(Vector, Node)}
+   * system. You can use {@link #transformOfFrom(Vector, Frame)}
    * to convert this axis from another coordinate system.
    * <p>
    * <b>Attention: </b>Spinning may be decelerated according to {@link #damping()} till it
@@ -3595,8 +3595,8 @@ public class Node implements Grabber {
     Vector trns = new Vector();
     Vector pos = position();
     Quaternion o = orientation();
-    Node oldRef = reference();
-    Node rFrame = new Node(_graph);
+    Frame oldRef = reference();
+    Frame rFrame = new Frame(_graph);
     rFrame.setPosition(graph().anchor());
     rFrame.setZAxis(Vector.subtract(pos, graph().anchor()));
     rFrame.setXAxis(xAxis());
@@ -3790,7 +3790,7 @@ public class Node implements Grabber {
    * @see #screenToQuaternion(float, float, float)
    */
   public Vector eyeToReferenceFrame(Vector vector) {
-    Node gFrame = isEye() ? this : /* respectToEye() ? */_graph.eye() /* : this */;
+    Frame gFrame = isEye() ? this : /* respectToEye() ? */_graph.eye() /* : this */;
     Vector t = gFrame.inverseTransformOf(vector);
     if (reference() != null)
       t = reference().transformOf(t);

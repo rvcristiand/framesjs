@@ -10,8 +10,8 @@
 
 package frames.core.constraint;
 
+import frames.core.Frame;
 import frames.core.Graph;
-import frames.core.Node;
 import frames.primitives.Quaternion;
 import frames.primitives.Vector;
 
@@ -37,7 +37,7 @@ public class EyeConstraint extends AxisPlaneConstraint {
   /**
    * Returns the associated Eye. Set using the EyeConstraint constructor.
    */
-  public Node eye() {
+  public Frame eye() {
     return scene.eye();
   }
 
@@ -47,7 +47,7 @@ public class EyeConstraint extends AxisPlaneConstraint {
    * system by {@link #translationConstraintDirection()}.
    */
   @Override
-  public Vector constrainTranslation(Vector translation, Node frame) {
+  public Vector constrainTranslation(Vector translation, Frame frame) {
     Vector res = translation.get();
     Vector proj;
     switch (translationConstraintType()) {
@@ -78,7 +78,7 @@ public class EyeConstraint extends AxisPlaneConstraint {
    * coordinate system by {@link #rotationConstraintDirection()}.
    */
   @Override
-  public Quaternion constrainRotation(Quaternion rotation, Node frame) {
+  public Quaternion constrainRotation(Quaternion rotation, Frame frame) {
     Quaternion res = rotation.get();
     switch (rotationConstraintType()) {
       case FREE:

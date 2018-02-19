@@ -1,9 +1,9 @@
 package third;
 
-import common.InteractiveNode;
+import common.InteractiveFrame;
 import processing.core.PApplet;
 import processing.core.PVector;
-import frames.core.Node;
+import frames.core.Frame;
 import frames.primitives.Vector;
 import frames.processing.Mouse;
 import frames.processing.Scene;
@@ -26,7 +26,7 @@ public class Flock extends PApplet {
 
   int initBoidNum = 300; // amount of boids to start the program with
   static ArrayList<Boid> flock;
-  static Node thirdPerson;
+  static Frame thirdPerson;
 
   public void settings() {
     size(1000, 800, P3D);
@@ -38,7 +38,7 @@ public class Flock extends PApplet {
     scene.mouse().setMode(Mouse.Mode.CLICK);
     scene.setBoundingBox(new Vector(0, 0, 0), new Vector(flockWidth, flockHeight, flockDepth));
     scene.setAnchor(scene.center());
-    InteractiveNode eye = new InteractiveNode(scene);
+    InteractiveFrame eye = new InteractiveFrame(scene);
     scene.setEye(eye);
     scene.setFieldOfView(PI / 3);
     //interactivity defaults to the eye
@@ -129,7 +129,7 @@ public class Flock extends PApplet {
 
         /*
         if(thirdPerson && scene.eye().reference() == null && !scene.interpolator().started())
-            scene.eye().setReference(nodeInterpolator.node());
+            scene.eye().setReference(nodeInterpolator.frame());
         */
   }
 
@@ -137,7 +137,7 @@ public class Flock extends PApplet {
         /*
         if(key == 'i') {
             thirdPerson = true;
-            scene.interpolateTo(nodeInterpolator.node());
+            scene.interpolateTo(nodeInterpolator.frame());
         }
         if(key == 'I') {
             thirdPerson = false;
@@ -175,7 +175,7 @@ public class Flock extends PApplet {
                     scene.eye().setReference(null);
                     //*/
         } else if (thirdPerson != null) {
-          ((Node) scene.eye()).setReference(thirdPerson);
+          ((Frame) scene.eye()).setReference(thirdPerson);
           scene.interpolateTo(thirdPerson);
         }
         break;

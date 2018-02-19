@@ -61,29 +61,29 @@ import java.util.List;
  * </pre>
  * In this case, the scene {@link #frontBuffer()} corresponds to the {@code canvas}.
  * <h3>The eye</h3>
- * The scene eye can be an instance of {@link Node}. To set the
+ * The scene eye can be an instance of {@link Frame}. To set the
  * eye from a frame instance use code such as the following:
  * <pre>
  * {@code
  * ...
- * Node eye;
+ * Frame eye;
  * void setup() {
  *   ...
- *   eye = new Node(scene);
+ *   eye = new Frame(scene);
  *   scene.setEye(eye);
  * }
  * }
  * </pre>
- * The eye can be controlled programmatically using the powerful {@link Node} API.
+ * The eye can be controlled programmatically using the powerful {@link Frame} API.
  * <p>
  * To set the eye from a node instance use code such as the following:
  * <pre>
  * {@code
  * ...
- * Node eye;
+ * Frame eye;
  * void setup() {
  *   ...
- *   eye = new Node(scene) {
+ *   eye = new Frame(scene) {
  *     public void interact(Event event) {
  *       if (event.shortcut().matches(new Shortcut(PApplet.LEFT)))
  *         translate(event);
@@ -93,17 +93,17 @@ import java.util.List;
  * }
  * }
  * </pre>
- * The eye can be controlled both programmatically (since a {@link Node} is a
+ * The eye can be controlled both programmatically (since a {@link Frame} is a
  * {@link Frame} specialization) and interactively (using the mouse, see
  * {@link #mouse()} and {@link Mouse}). Note the use of the anonymous
- * inner {@link Node} class used to define how the node will behave, refer to the
- * {@link Node} API for details. Note also the {@link #setDefaultNode(Node)} call
+ * inner {@link Frame} class used to define how the node will behave, refer to the
+ * {@link Frame} API for details. Note also the {@link #setDefaultNode(Frame)} call
  * which will direct mouse input to the eye when no other node is being picked.
  * <h3>Shapes</h3>
- * A {@link Shape} is a {@link Node} specialization that can be set from a
+ * A {@link Shape} is a {@link Frame} specialization that can be set from a
  * retained-mode rendering Processing {@code PShape} or from an immediate-mode
  * rendering Processing procedure. Shapes can be picked precisely using their projection
- * onto the screen, see {@link Shape#setPrecision(Node.Precision)}. Use
+ * onto the screen, see {@link Shape#setPrecision(Frame.Precision)}. Use
  * {@link #traverse()} to render all scene-graph shapes or {@link Shape#draw()} to
  * render a specific one instead.
  * <h3>Retained-mode shapes</h3>
@@ -128,7 +128,7 @@ import java.util.List;
  * </pre>
  * <p>
  * Note tha shapes like nodes can be control interactively. Override
- * {@link Node#interact(Event)}, like it has been done above.
+ * {@link Frame#interact(Event)}, like it has been done above.
  * <h2>Key-frame interpolators</h2>
  * A frame (and hence a node or a shape) can be animated through a key-frame
  * Catmull-Rom interpolator path. Use code such as the following:
@@ -143,13 +143,13 @@ import java.util.List;
  *   shape = new Shape(scene, pshape);
  *   interpolator = new Interpolator(shape);
  *   for (int i = 0; i < random(4, 10); i++)
- *     interpolator.addKeyFrame(Node.random(scene));
+ *     interpolator.addKeyFrame(Frame.random(scene));
  *   interpolator.start();
  * }
  * }
  * </pre>
- * which will create a random (see {@link Node#random(Graph)}) interpolator path
- * containing [4..10] key-frames (see {@link Interpolator#addKeyFrame(Node)}).
+ * which will create a random (see {@link Frame#random(Graph)}) interpolator path
+ * containing [4..10] key-frames (see {@link Interpolator#addKeyFrame(Frame)}).
  * The interpolation is also started (see {@link Interpolator#start()}). The
  * interpolator path may be drawn with code like this:
  * <pre>
@@ -302,8 +302,8 @@ public class Scene extends Graph implements PConstants {
   //TODO experimental rename and add api docs.
   // decide later
   /*
-  public Node orbitNode() {
-    class OrbitNode extends Node {
+  public Frame orbitNode() {
+    class OrbitNode extends Frame {
       Shortcut left = new Shortcut(PApplet.LEFT);
       Shortcut right = new Shortcut(PApplet.RIGHT);
       Shortcut wheel = new Shortcut(processing.event.MouseEvent.WHEEL);
@@ -1193,10 +1193,10 @@ public class Scene extends Graph implements PConstants {
   protected Interpolator _toInterpolator(JSONArray jsonInterpolator) {
     Interpolator interpolator = new Interpolator(this);
     for (int j = 0; j < jsonInterpolator.size(); j++) {
-      Node keyFrame = new Node(this);
+      Frame keyFrame = new Frame(this);
       pruneBranch(keyFrame);
       keyFrame.setWorldMatrix(_toFrame(jsonInterpolator.getJSONObject(j)));
-      keyFrame.setPrecision(Node.Precision.FIXED);
+      keyFrame.setPrecision(Frame.Precision.FIXED);
       keyFrame.setPrecisionThreshold(20);
       interpolator.addKeyFrame(keyFrame, jsonInterpolator.getJSONObject(j).getFloat("time"));
       /*
@@ -1227,8 +1227,8 @@ public class Scene extends Graph implements PConstants {
   /**
    * Used internally by {@link #loadConfig(String)}. Converts the P5 JSONObject into a frame.
    */
-  protected Node _toFrame(JSONObject jsonFrame) {
-    Node frame = new Node(this);
+  protected Frame _toFrame(JSONObject jsonFrame) {
+    Frame frame = new Frame(this);
     float x, y, z, w;
     x = jsonFrame.getJSONArray("position").getFloat(0);
     y = jsonFrame.getJSONArray("position").getFloat(1);
@@ -1247,7 +1247,7 @@ public class Scene extends Graph implements PConstants {
    * Used internally by {@link #saveConfig(String)}. Converts {@code frame} into a P5
    * JSONObject.
    */
-  protected JSONObject _toJSONObject(Node frame) {
+  protected JSONObject _toJSONObject(Frame frame) {
     JSONObject jsonFrame = new JSONObject();
     jsonFrame.setFloat("magnitude", frame.magnitude());
     jsonFrame.setJSONArray("position", _toJSONArray(frame.position()));
@@ -1316,12 +1316,12 @@ public class Scene extends Graph implements PConstants {
   }
 
   @Override
-  protected void _visit(Node node) {
+  protected void _visit(Frame frame) {
     _targetPGraphics.pushMatrix();
-    applyTransformation(_targetPGraphics, node);
-    node.visit();
-    if (!node.isCulled())
-      for (Node child : node.children())
+    applyTransformation(_targetPGraphics, frame);
+    frame.visit();
+    if (!frame.isCulled())
+      for (Frame child : frame.children())
         _visit(child);
     _targetPGraphics.popMatrix();
   }
@@ -1333,7 +1333,7 @@ public class Scene extends Graph implements PConstants {
    *
    * @see #matrixHandler()
    * @see #setMatrixHandler(MatrixHandler)
-   * @see #applyWorldTransformation(PGraphics, Node)
+   * @see #applyWorldTransformation(PGraphics, Frame)
    */
   public MatrixHandler matrixHandler(PGraphics pGraphics) {
     return (pGraphics instanceof processing.opengl.PGraphicsOpenGL) ?
@@ -1363,12 +1363,12 @@ public class Scene extends Graph implements PConstants {
    * Apply the local transformation defined by the given {@code frame} on the given
    * {@code pGraphics}. This method doesn't call {@link #_bind(PGraphics)} which
    * should be called manually (only makes sense when {@link #frontBuffer()} is different than
-   * {@code pGraphics}). Needed by {@link #applyWorldTransformation(PGraphics, Node)}.
+   * {@code pGraphics}). Needed by {@link #applyWorldTransformation(PGraphics, Frame)}.
    *
-   * @see #applyWorldTransformation(PGraphics, Node)
+   * @see #applyWorldTransformation(PGraphics, Frame)
    * @see #_bind(PGraphics)
    */
-  public static void applyTransformation(PGraphics pGraphics, Node frame) {
+  public static void applyTransformation(PGraphics pGraphics, Frame frame) {
     if (pGraphics instanceof PGraphics3D) {
       pGraphics.translate(frame.translation()._vector[0], frame.translation()._vector[1], frame.translation()._vector[2]);
       pGraphics.rotate(frame.rotation().angle(), frame.rotation().axis()._vector[0],
@@ -1387,11 +1387,11 @@ public class Scene extends Graph implements PConstants {
    * should be called manually (only makes sense when {@link #frontBuffer()} is different than
    * {@code pGraphics}).
    *
-   * @see #applyTransformation(PGraphics, Node)
+   * @see #applyTransformation(PGraphics, Frame)
    * @see #_bind(PGraphics)
    */
-  public static void applyWorldTransformation(PGraphics pGraphics, Node frame) {
-    Node reference = frame.reference();
+  public static void applyWorldTransformation(PGraphics pGraphics, Frame frame) {
+    Frame reference = frame.reference();
     if (reference != null) {
       applyWorldTransformation(pGraphics, reference);
       applyTransformation(pGraphics, frame);
@@ -1700,10 +1700,10 @@ public class Scene extends Graph implements PConstants {
       int nbSteps = 30;
       frontBuffer().strokeWeight(2 * frontBuffer().strokeWeight);
       frontBuffer().noFill();
-      List<Node> path = interpolator.path();
+      List<Frame> path = interpolator.path();
       if (((mask & 1) != 0) && path.size() > 1) {
         frontBuffer().beginShape();
-        for (Node myFr : path)
+        for (Frame myFr : path)
           vertex(myFr.position().x(), myFr.position().y(), myFr.position().z());
         frontBuffer().endShape();
       }
@@ -1713,7 +1713,7 @@ public class Scene extends Graph implements PConstants {
           frameCount = nbSteps;
         float goal = 0.0f;
 
-        for (Node myFr : path)
+        for (Frame myFr : path)
           if ((count++) >= goal) {
             goal += nbSteps / (float) frameCount;
             pushModelView();
@@ -1731,7 +1731,7 @@ public class Scene extends Graph implements PConstants {
       frontBuffer().strokeWeight(frontBuffer().strokeWeight / 2f);
     }
     // draw the picking targets:
-    for (Node frame : interpolator.keyFrames())
+    for (Frame frame : interpolator.keyFrames())
       if (!frame.isDetached())
         drawPickingTarget(frame);
     frontBuffer().popStyle();
@@ -2418,7 +2418,7 @@ public class Scene extends Graph implements PConstants {
    * {@link #drawEye(PGraphics, Graph, boolean)} on the scene {@link #frontBuffer()}. If
    * {@code texture} draws the projected scene on the near plane.
    *
-   * @see #applyTransformation(Node)
+   * @see #applyTransformation(Frame)
    * @see #drawEye(PGraphics, Graph, boolean)
    */
   public void drawEye(Graph graph, boolean texture) {
@@ -2584,7 +2584,7 @@ public class Scene extends Graph implements PConstants {
    * If {@code texture} draws the projected scene on the near plane.
    *
    * @see #drawEyeNearPlane(PGraphics, Graph, boolean)
-   * @see #applyTransformation(Node)
+   * @see #applyTransformation(Frame)
    * @see #drawEye(PGraphics, Graph, boolean)
    */
   public void drawEyeNearPlane(Graph graph, boolean texture) {
@@ -2914,12 +2914,12 @@ public class Scene extends Graph implements PConstants {
   }
 
   /**
-   * Draws the node picking target: a shooter target visual hint of
-   * {@link Node#precisionThreshold()} pixels size.
+   * Draws the frame picking target: a shooter target visual hint of
+   * {@link Frame#precisionThreshold()} pixels size.
    */
   //TODO better to implement it from Frame param, but I'm just too lazy to do that ;)
-  public void drawPickingTarget(Node node) {
-    if (node.isEye()) {
+  public void drawPickingTarget(Frame frame) {
+    if (frame.isEye()) {
       System.err.println("eye nodes don't have a picking target");
       return;
     }
@@ -2927,8 +2927,8 @@ public class Scene extends Graph implements PConstants {
     // System.err.println("addGrabber iFrame to motionAgent before drawing picking target");
     // return;
     // }
-    Vector center = projectedCoordinatesOf(node.position());
-    if (inputHandler().isInputGrabber(node)) {
+    Vector center = projectedCoordinatesOf(frame.position());
+    if (inputHandler().isInputGrabber(frame)) {
       frontBuffer().pushStyle();
       frontBuffer().strokeWeight(2 * frontBuffer().strokeWeight);
       frontBuffer().colorMode(HSB, 255);
@@ -2936,7 +2936,7 @@ public class Scene extends Graph implements PConstants {
       float saturation = frontBuffer().saturation(frontBuffer().strokeColor);
       float brightness = frontBuffer().brightness(frontBuffer().strokeColor);
       frontBuffer().stroke(hue, saturation * 1.4f, brightness * 1.4f);
-      drawShooterTarget(center, (node.precisionThreshold() + 1));
+      drawShooterTarget(center, (frame.precisionThreshold() + 1));
       frontBuffer().popStyle();
     } else {
       frontBuffer().pushStyle();
@@ -2945,7 +2945,7 @@ public class Scene extends Graph implements PConstants {
       float saturation = frontBuffer().saturation(frontBuffer().strokeColor);
       float brightness = frontBuffer().brightness(frontBuffer().strokeColor);
       frontBuffer().stroke(hue, saturation * 1.4f, brightness);
-      drawShooterTarget(center, node.precisionThreshold());
+      drawShooterTarget(center, frame.precisionThreshold());
       frontBuffer().popStyle();
     }
   }

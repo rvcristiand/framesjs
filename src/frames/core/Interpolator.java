@@ -64,7 +64,7 @@ import java.util.ListIterator;
  * {@link #lastTime()} (unless loop() is {@code true}).
  * <p>
  * <b>Attention:</b> If a {@link frames.core.constraint.Constraint} is attached to
- * the {@link #frame()} (see {@link Node#constraint()}), it should be reset before
+ * the {@link #frame()} (see {@link Frame#constraint()}), it should be reset before
  * {@link #start()} is called, otherwise the interpolated motion (computed as if
  * there was no constraint) will probably be erroneous.
  */
@@ -100,9 +100,9 @@ public class Interpolator {
     protected Quaternion _tangentQuaternion;
     protected Vector _tangentVector;
     protected float _time;
-    protected Node _frame;
+    protected Frame _frame;
 
-    KeyFrame(Node frame, float time) {
+    KeyFrame(Frame frame, float time) {
       _time = time;
       _frame = frame;
     }
@@ -116,7 +116,7 @@ public class Interpolator {
       return new KeyFrame(this);
     }
 
-    Node frame() {
+    Frame frame() {
       return _frame;
     }
 
@@ -156,10 +156,10 @@ public class Interpolator {
   protected ListIterator<KeyFrame> _current1;
   protected ListIterator<KeyFrame> _current2;
   protected ListIterator<KeyFrame> _current3;
-  protected List<Node> _path;
+  protected List<Frame> _path;
 
   // Main frame
-  protected Node _frame;
+  protected Frame _frame;
 
   // Beat
   protected TimingTask _task;
@@ -182,7 +182,7 @@ public class Interpolator {
   protected Graph _graph;
 
   /**
-   * Convenience constructor that simply calls {@code this(graph, new Node(graph))}.
+   * Convenience constructor that simply calls {@code this(graph, new Frame(graph))}.
    * <p>
    * Creates an anonymous {@link #frame()} to be interpolated by this
    * interpolator.
@@ -190,21 +190,21 @@ public class Interpolator {
    * @see #Interpolator(Graph)
    */
   public Interpolator(Graph graph) {
-    this(new Node(graph));
+    this(new Frame(graph));
   }
 
   /**
    * Creates an interpolator, with {@code frame} as associated {@link #frame()}.
    * <p>
-   * The {@link #frame()} can be set or changed using {@link #setFrame(Node)}.
+   * The {@link #frame()} can be set or changed using {@link #setFrame(Frame)}.
    * <p>
    * {@link #time()}, {@link #speed()} and {@link #period()} are set to their default values.
    */
-  public Interpolator(Node frame) {
+  public Interpolator(Frame frame) {
     _graph = frame.graph();
     setFrame(frame);
     _list = new ArrayList<KeyFrame>();
-    _path = new ArrayList<Node>();
+    _path = new ArrayList<Frame>();
     _period = 40;
     _time = 0.0f;
     _speed = 1.0f;
@@ -230,8 +230,8 @@ public class Interpolator {
   protected Interpolator(Interpolator other) {
     this._graph = other._graph;
     this.setFrame(other.frame());
-    this._path = new ArrayList<Node>();
-    ListIterator<Node> frameIt = other._path.listIterator();
+    this._path = new ArrayList<Frame>();
+    ListIterator<Frame> frameIt = other._path.listIterator();
     while (frameIt.hasNext()) {
       this._path.add(frameIt.next().get());
     }
@@ -296,14 +296,14 @@ public class Interpolator {
   }
 
   /**
-   * Sets the interpolator {@link #frame()}. If frame is instance of {@link frames.core.Node},
-   * the frame graph ({@link Node#graph()}) and {@link #graph()} should match.
+   * Sets the interpolator {@link #frame()}. If frame is instance of {@link Frame},
+   * the frame graph ({@link Frame#graph()}) and {@link #graph()} should match.
    */
-  public void setFrame(Node frame) {
+  public void setFrame(Frame frame) {
     if (frame == _frame)
       return;
     if (graph() != frame.graph())
-      throw new RuntimeException("Node and Interpolator graphs should match");
+      throw new RuntimeException("Frame and Interpolator graphs should match");
     _frame = frame;
   }
 
@@ -314,15 +314,15 @@ public class Interpolator {
    * magnitude will regularly be updated by a timer, so that they follow the
    * interpolator path.
    * <p>
-   * Set using {@link #setFrame(Node)} or with the interpolator constructor.
+   * Set using {@link #setFrame(Frame)} or with the interpolator constructor.
    */
-  public Node frame() {
+  public Frame frame() {
     return _frame;
   }
 
   /**
    * Returns the number of key frames used by the interpolation. Use
-   * {@link #addKeyFrame(Node)} to add new key frames.
+   * {@link #addKeyFrame(Frame)} to add new key frames.
    */
   public int size() {
     return _list.size();
@@ -505,7 +505,7 @@ public class Interpolator {
    * starting {@link #time()}.
    * <p>
    * <b>Attention:</b> The key frames must be defined (see
-   * {@link #addKeyFrame(Node, float)}) before you start(), or else
+   * {@link #addKeyFrame(Frame, float)}) before you start(), or else
    * the interpolation will naturally immediately stop.
    */
   public void start(int period) {
@@ -555,11 +555,11 @@ public class Interpolator {
   /**
    * Appends a new key frame to the path.
    * <p>
-   * Same as {@link #addKeyFrame(Node, float)}, except that the
+   * Same as {@link #addKeyFrame(Frame, float)}, except that the
    * {@link #time(int)} is set to the previous {@link #time(int)} plus one
    * second (or 0 if there is no previous key frame).
    */
-  public void addKeyFrame(Node frame) {
+  public void addKeyFrame(Frame frame) {
     float time;
 
     if (_list.isEmpty())
@@ -580,13 +580,13 @@ public class Interpolator {
    * {@code null} frame references are silently ignored. The {@link #time(int)} has to be
    * monotonously increasing over key frames.
    */
-  public void addKeyFrame(Node frame, float time) {
+  public void addKeyFrame(Frame frame, float time) {
     if (frame == null)
       return;
 
     if (!frame.isDetached())
       if (graph() != frame._graph)
-        throw new RuntimeException("Node and Interpolator graphs should match");
+        throw new RuntimeException("Frame and Interpolator graphs should match");
 
     if (_list.isEmpty())
       _time = time;
@@ -660,8 +660,8 @@ public class Interpolator {
   /**
    * Returns the list of key frames which defines this interpolator.
    */
-  public List<Node> keyFrames() {
-    List<Node> list = new ArrayList<Node>();
+  public List<Frame> keyFrames() {
+    List<Frame> list = new ArrayList<Frame>();
     for (KeyFrame keyFrame : _list)
       list.add(keyFrame.frame());
     return list;
@@ -675,7 +675,7 @@ public class Interpolator {
    * <p>
    * Use it in your interpolator path drawing routine.
    */
-  public List<Node> path() {
+  public List<Frame> path() {
     _updatePath();
     return _path;
   }
@@ -697,7 +697,7 @@ public class Interpolator {
 
       if (_list.get(0) == _list.get(_list.size() - 1))
         _path.add(
-            new Node(_list.get(0).position(), _list.get(0).orientation(), _list.get(0).magnitude()));
+            new Frame(_list.get(0).position(), _list.get(0).orientation(), _list.get(0).magnitude()));
       else {
         KeyFrame[] kf = new KeyFrame[4];
         kf[0] = _list.get(0);
@@ -728,7 +728,7 @@ public class Interpolator {
             //*/
             ///*
             float alpha = step / (float) nbSteps;
-            _path.add(new Node(
+            _path.add(new Frame(
                 Vector.add(kf[1].position(),
                     Vector.multiply(Vector.add(kf[1].tangentVector(), Vector.multiply(Vector.add(pvec1, Vector.multiply(pvec2, alpha)), alpha)), alpha)),
                 Quaternion.squad(kf[1].orientation(), kf[1].tangentQuaternion(), kf[2].tangentQuaternion(), kf[2].orientation(), alpha),
@@ -746,7 +746,7 @@ public class Interpolator {
           kf[3] = (index < _list.size()) ? _list.get(index) : null;
         }
         // Add last KeyFrame
-        _path.add(new Node(kf[1].position(), kf[1].orientation(), kf[1].magnitude()));
+        _path.add(new Frame(kf[1].position(), kf[1].orientation(), kf[1].magnitude()));
       }
       _pathIsValid = true;
     }
@@ -776,7 +776,7 @@ public class Interpolator {
    * See also {@link #time(int)}. {@code index} has to be in the range 0..
    * {@link #size()}-1.
    */
-  public Node keyFrame(int index) {
+  public Frame keyFrame(int index) {
     return _list.get(index).frame();
   }
 

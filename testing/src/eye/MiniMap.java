@@ -1,11 +1,11 @@
 package eye;
 
-import common.InteractiveNode;
+import common.InteractiveFrame;
 import common.InteractiveShape;
+import frames.core.Frame;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import frames.core.Graph;
-import frames.core.Node;
 import frames.processing.Scene;
 import frames.processing.Shape;
 
@@ -36,13 +36,13 @@ public class MiniMap extends PApplet {
     scene = new Scene(this, sceneCanvas);
     //if(scene.is3D()) scene.setType(Graph.Type.ORTHOGRAPHIC);
     node1 = new TorusShape(scene);
-    //node1.setPrecision(Node.Precision.EXACT);
+    //node1.setPrecision(Frame.Precision.EXACT);
     node1.translate(30, 30);
     node2 = new TorusShape(node1);
     node2.translate(40, 0);
     node3 = new TorusShape(node2);
     node3.translate(40, 0);
-    InteractiveNode sceneEye = new InteractiveNode(scene);
+    InteractiveFrame sceneEye = new InteractiveFrame(scene);
     scene.setEye(sceneEye);
     scene.setFieldOfView((float) Math.PI / 3);
     //interactivity defaults to the eye
@@ -56,10 +56,10 @@ public class MiniMap extends PApplet {
     minimapCanvas = createGraphics(oW, oH, renderer);
     minimap = new Scene(this, minimapCanvas, oX, oY);
     node4 = new TorusShape(minimap);
-    ////node1.setPrecision(Node.Precision.EXACT);
+    ////node1.setPrecision(Frame.Precision.EXACT);
     node4.translate(30, 30);
     if (minimap.is3D()) minimap.setType(Graph.Type.ORTHOGRAPHIC);
-    InteractiveNode minimapEye = new InteractiveNode(minimap);
+    InteractiveFrame minimapEye = new InteractiveFrame(minimap);
     minimap.setEye(minimapEye);
     //interactivity defaults to the eye
     minimap.setDefaultNode(minimapEye);
@@ -78,7 +78,7 @@ public class MiniMap extends PApplet {
   }
 
   public void draw() {
-    Node.sync((Node) scene.eye(), eye);
+    Frame.sync((Frame) scene.eye(), eye);
     scene.beginDraw();
     sceneCanvas.background(0);
     scene.traverse();
@@ -92,9 +92,9 @@ public class MiniMap extends PApplet {
       minimap.traverse();
       //eye.draw();
       ///*
-      for (Node node : scene.nodes())
-        if (node instanceof Shape)
-          ((Shape) node).draw(minimap.frontBuffer());
+      for (Frame frame : scene.nodes())
+        if (frame instanceof Shape)
+          ((Shape) frame).draw(minimap.frontBuffer());
       //*/
       minimap.drawAxes();
       minimap.endDraw();

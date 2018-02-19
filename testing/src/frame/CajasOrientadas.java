@@ -1,9 +1,9 @@
 package frame;
 
-import common.InteractiveNode;
+import common.InteractiveFrame;
+import frames.core.Frame;
 import processing.core.PApplet;
 import frames.core.Graph;
-import frames.core.Node;
 import frames.input.event.MotionEvent;
 import frames.primitives.Matrix;
 import frames.primitives.Vector;
@@ -17,7 +17,7 @@ public class CajasOrientadas extends PApplet {
   Scene graph;
   Box[] cajas;
   Sphere esfera;
-  Node eye1, eye2;
+  Frame eye1, eye2;
 
   public void settings() {
     size(640, 360, P3D);
@@ -49,9 +49,9 @@ public class CajasOrientadas extends PApplet {
     for (int i = 0; i < cajas.length; i++)
       cajas[i] = new Box(graph);
 
-    eye1 = new InteractiveNode(graph);
+    eye1 = new InteractiveFrame(graph);
 
-    eye2 = new Node(graph) {
+    eye2 = new Frame(graph) {
       @Override
       public void interact(MotionEvent event) {
         if (event.shortcut().matches(Mouse.LEFT))
@@ -149,7 +149,7 @@ public class CajasOrientadas extends PApplet {
     if (key == 'S')
       graph.fitBall();
     if (key == 'u')
-      graph.shiftDefaultNode((Node) graph.eye(), esfera.iFrame);
+      graph.shiftDefaultNode((Frame) graph.eye(), esfera.iFrame);
     if (key == 't')
       info();
     if (key == 'v') {

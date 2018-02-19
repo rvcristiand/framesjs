@@ -1,10 +1,10 @@
 package basics;
 
-import common.InteractiveNode;
+import common.InteractiveFrame;
+import frames.core.Frame;
 import processing.core.PApplet;
 import processing.core.PShape;
 import frames.core.Interpolator;
-import frames.core.Node;
 import frames.processing.Scene;
 import frames.processing.Shape;
 
@@ -17,7 +17,7 @@ public class ShapeInterpolation extends PApplet {
   PShape pbox, psphere;
   Shape box, sphere;
   Interpolator interpolator;
-  InteractiveNode eye;
+  InteractiveFrame eye;
   boolean showEyePath = true;
 
   //Choose P3D for a 3D scene, or P2D or JAVA2D for a 2D scene
@@ -30,7 +30,7 @@ public class ShapeInterpolation extends PApplet {
   public void setup() {
     rectMode(CENTER);
     scene = new Scene(this);
-    eye = new InteractiveNode(scene);
+    eye = new InteractiveFrame(scene);
     scene.setEye(eye);
     //interactivity defaults to the eye
     scene.setDefaultNode(eye);
@@ -63,13 +63,13 @@ public class ShapeInterpolation extends PApplet {
 
     // 2. Using nodes:
     //for (int i = 0; i < random(4, 10); i++)
-    // interpolator.addKeyFrame(Node.random(scene));
+    // interpolator.addKeyFrame(Frame.random(scene));
 
     // 3. Using InteractiveNodes, which is the same as 2., but makes path editable
     for (int i = 0; i < random(4, 10); i++) {
-      Node node = new InteractiveNode(scene);
-      node.randomize();
-      interpolator.addKeyFrame(node);
+      Frame frame = new InteractiveFrame(scene);
+      frame.randomize();
+      interpolator.addKeyFrame(frame);
     }
     interpolator.start();
 
