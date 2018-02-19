@@ -2295,6 +2295,7 @@ public class Graph {
     setEye(eye().get());
     fitScreenRegion(rectangle);
     _interpolator.addKeyFrame(eye().detach());
+    pruneBranch(eye());
     setEye(eye);
     _interpolator.start();
   }
@@ -2316,6 +2317,7 @@ public class Graph {
     setEye(eye().get());
     fitBall();
     _interpolator.addKeyFrame(eye().detach());
+    pruneBranch(eye());
     setEye(eye);
     _interpolator.start();
   }

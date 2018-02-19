@@ -66,6 +66,7 @@ public class ShapeInterpolation extends PApplet {
     // interpolator.addKeyFrame(Frame.random(scene));
 
     // 3. Using InteractiveNodes, which is the same as 2., but makes path editable
+    //for (int i = 0; i < random(4, 10); i++) {
     for (int i = 0; i < random(4, 10); i++) {
       Frame frame = new InteractiveFrame(scene);
       frame.randomize();
@@ -92,8 +93,10 @@ public class ShapeInterpolation extends PApplet {
       showEyePath = !showEyePath;
     if (key == 's')
       scene.fitBallInterpolation();
-    if (key == 'f')
-      scene.fitBall();
+    if (key == 'f') {
+      scene.fitBallInterpolation();
+      println(scene.nodes().size());
+    }
     if (key == 't')
       scene.shiftTimers();
     if (key == CODED)
