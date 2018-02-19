@@ -45,17 +45,17 @@ import java.util.List;
  * {@link #pruneBranch(Node)}, {@link #appendBranch(List)}, {@link #isNodeReachable(Node)},
  * {@link #branch(Node)}, and {@link #clear()}.
  * <h2>Eye handling</h2>
- * Any {@link Frame} or {@link Node} (belonging to the graph hierarchy) may be set as the
- * {@link #eye()} (see {@link #setEye(Frame)}). Several frame wrapper functions to handle
+ * Any {@link Node} (belonging to the graph hierarchy) may be set as the
+ * {@link #eye()} (see {@link #setEye(Node)}). Several frame wrapper functions to handle
  * the eye, such as {@link #lookAt(Vector)}, {@link #at()}, {@link #setViewDirection(Vector)},
  * {@link #setUpVector(Vector)}, {@link #upVector()}, {@link #fitFieldOfView()},
  * {@link #fieldOfView()}, {@link #setHorizontalFieldOfView(float)}, {@link #fitBall()}
- * {@link #projectedCoordinatesOf(Vector, Frame)} and
- * {@link #unprojectedCoordinatesOf(Vector, Frame)}, are provided for convenience.
+ * {@link #projectedCoordinatesOf(Vector, Node)} and
+ * {@link #unprojectedCoordinatesOf(Vector, Node)}, are provided for convenience.
  * <h3>Interpolator</h3>
  * A default {@link #interpolator()} may perform several {@link #eye()} interpolations
  * such as {@link #fitBallInterpolation()}, {@link #fitScreenRegionInterpolation(Rectangle)},
- * {@link #interpolateTo(Frame)} and {@link #interpolateTo(Frame, float)}. Refer to the
+ * {@link #interpolateTo(Node)} and {@link #interpolateTo(Node, float)}. Refer to the
  * {@link Interpolator} documentation for details.
  * <h3>Visibility and culling techniques</h3>
  * Geometry may be culled against the viewing volume by calling {@link #isPointVisible(Vector)},
@@ -86,7 +86,7 @@ import java.util.List;
  * (which wrap {@link MatrixHandler} functions with the same signatures) and
  * (possibly) {@code Matrix.multiply(projection(), modelView())}.
  * <p>
- * To {@link #applyTransformation(Frame)}, call {@link #pushModelView()},
+ * To {@link #applyTransformation(Node)}, call {@link #pushModelView()},
  * {@link #popModelView()} and {@link #applyModelView(Matrix)} (which wrap
  * {@link MatrixHandler} functions with the same signatures).
  * <p>
@@ -102,14 +102,14 @@ import java.util.List;
  *
  * @see InputHandler
  * @see TimingHandler
- * @see #applyTransformation(Frame)
+ * @see #applyTransformation(Node)
  * @see MatrixHandler
  */
 //TODO
 // (decide) Remove printing stuff (vector, map, ...) and warnings (hashmap).
 public class Graph {
   // 1. Eye
-  protected Frame _eye;
+  protected Node _eye;
   protected long _lastEqUpdate;
   protected Vector _center;
   protected float _radius;
@@ -181,10 +181,10 @@ public class Graph {
    * {@code height} screen window dimensions. The graph {@link #center()} and
    * {@link #anchor()} are set to {@code (0,0,0)} and its {@link #radius()} to {@code 100}.
    * <p>
-   * The constructor sets a {@link Frame} instance as the graph {@link #eye()} and then
+   * The constructor sets a {@link Node} instance as the graph {@link #eye()} and then
    * calls {@link #fitBall()}, so that the entire scene fits the screen dimensions. To set
    * an interactive eye override {@link Node#interact(Event)} and set the node as the eye,
-   * see {@link #setEye(Frame)}.
+   * see {@link #setEye(Node)}.
    * <p>
    * The constructor also instantiates the graph {@link #matrixHandler()},
    * {@link #inputHandler()} and {@link #timingHandler()}.
@@ -201,7 +201,7 @@ public class Graph {
    * @see #inputHandler()
    * @see #setMatrixHandler(MatrixHandler)
    * @see #setRightHanded()
-   * @see #setEye(Frame)
+   * @see #setEye(Node)
    */
   public Graph(Type type, int width, int height) {
     setType(type);
@@ -216,7 +216,7 @@ public class Graph {
     setCenter(new Vector());
     _anchor = center().get();
     _interpolator = new Interpolator(this);
-    setEye(new Frame());
+    setEye(new Node(this));
     fitBall();
 
     setMatrixHandler(new MatrixHandler(this));
@@ -330,7 +330,7 @@ public class Graph {
    * <p>
    * Sets the field-of-view of the current {@link #eye()}.
    *
-   * @see Frame#setMagnitude(float)
+   * @see Node#setMagnitude(float)
    */
   public void setFieldOfView(float fov) {
     eye().setMagnitude((float) Math.tan(fov / 2.0f));
@@ -1171,9 +1171,9 @@ public class Graph {
   /**
    * Returns the associated eye. Never null.
    *
-   * @see #setEye(Frame)
+   * @see #setEye(Node)
    */
-  public Frame eye() {
+  public Node eye() {
     return _eye;
   }
 
@@ -1183,12 +1183,12 @@ public class Graph {
    *
    * @see #eye()
    */
-  public void setEye(Frame eye) {
+  public void setEye(Node eye) {
     if (eye == null || _eye == eye)
       return;
-    if (eye instanceof Node)
-      if (((Node) eye).graph() != this)
-        return;
+    if (eye.graph() != this)
+      throw new RuntimeException("This graph and eye.graph() should match");
+      //return;
     _eye = eye;
     _interpolator.setFrame(eye);
     _modified();
@@ -1823,7 +1823,7 @@ public class Graph {
   /**
    * Convenience function that simply returns {@code projectedCoordinatesOf(src, null)}.
    *
-   * @see #projectedCoordinatesOf(Vector, Frame)
+   * @see #projectedCoordinatesOf(Vector, Node)
    */
   public Vector projectedCoordinatesOf(Vector vector) {
     return projectedCoordinatesOf(vector, null);
@@ -1840,9 +1840,9 @@ public class Graph {
    * (0,0) being the upper left corner of the window. The z coordinate ranges between 0
    * (near plane) and 1 (excluded, far plane).
    *
-   * @see #unprojectedCoordinatesOf(Vector, Frame)
+   * @see #unprojectedCoordinatesOf(Vector, Node)
    */
-  public Vector projectedCoordinatesOf(Vector point, Frame frame) {
+  public Vector projectedCoordinatesOf(Vector point, Node frame) {
     float xyz[] = new float[3];
 
     if (frame != null) {
@@ -1907,7 +1907,7 @@ public class Graph {
   /**
    * Convenience function that simply returns {@code unprojectedCoordinatesOf(point, null)}.
    * <p>
-   * #see {@link #unprojectedCoordinatesOf(Vector, Frame)}
+   * #see {@link #unprojectedCoordinatesOf(Vector, Node)}
    */
   public Vector unprojectedCoordinatesOf(Vector point) {
     return this.unprojectedCoordinatesOf(point, null);
@@ -1928,7 +1928,7 @@ public class Graph {
    * {@code frame} hierarchy (i.e., when {@link Frame#reference()} is non-null) is taken into
    * account.
    * <p>
-   * {@link #projectedCoordinatesOf(Vector, Frame)} performs the inverse transformation.
+   * {@link #projectedCoordinatesOf(Vector, Node)} performs the inverse transformation.
    * <p>
    * This method only uses the intrinsic eye parameters (view and projection matrices),
    * {@link #width()} and {@link #height()}). You can hence define a virtual eye and use
@@ -1938,11 +1938,11 @@ public class Graph {
    * change in the matrices, you should buffer the inverse of the projection times view matrix
    * to speed-up the queries. See {@link #cacheProjectionViewInverse(boolean)}.
    *
-   * @see #projectedCoordinatesOf(Vector, Frame)
+   * @see #projectedCoordinatesOf(Vector, Node)
    * @see #setWidth(int)
    * @see #setHeight(int)
    */
-  public Vector unprojectedCoordinatesOf(Vector pixel, Frame frame) {
+  public Vector unprojectedCoordinatesOf(Vector pixel, Node frame) {
     float xyz[] = new float[3];
     // _unproject(src.vec[0], src.vec[1], src.vec[2], this.getViewMatrix(true),
     // this.getProjectionMatrix(true),
@@ -2178,8 +2178,7 @@ public class Graph {
     eye().rotate(q);
 
     // Useful in fly mode to keep the horizontal direction.
-    if (eye() instanceof Node)
-      ((Node) eye())._updateUpVector();
+    eye()._updateUpVector();
   }
 
   /**
@@ -2242,7 +2241,7 @@ public class Graph {
 
   /**
    * Returns the {@link #eye()} {@link Interpolator} used by {@link #fitBallInterpolation()},
-   * {@link #fitScreenRegionInterpolation(Rectangle)}, {@link #interpolateTo(Frame)}, etc.
+   * {@link #fitScreenRegionInterpolation(Rectangle)}, {@link #interpolateTo(Node)}, etc.
    */
   public Interpolator interpolator() {
     return _interpolator;
@@ -2251,10 +2250,10 @@ public class Graph {
   /**
    * Convenience function that simply calls {@code interpolateTo(fr, 1)}.
    *
-   * @see #interpolateTo(Frame, float)
+   * @see #interpolateTo(Node, float)
    */
   //TODO needs testing, e.g., setAvatar
-  public void interpolateTo(Frame frame) {
+  public void interpolateTo(Node frame) {
     interpolateTo(frame, 1);
   }
 
@@ -2265,10 +2264,10 @@ public class Graph {
    * {@code frame} is expressed in world coordinates. {@code duration} tunes the
    * interpolation speed.
    *
-   * @see #interpolateTo(Frame)
+   * @see #interpolateTo(Node)
    * @see #fitBallInterpolation()
    */
-  public void interpolateTo(Frame frame, float duration) {
+  public void interpolateTo(Node frame, float duration) {
     _interpolator.stop();
     _interpolator.clear();
     _interpolator.addKeyFrame(eye().detach());
@@ -2289,15 +2288,14 @@ public class Graph {
    * fitted.
    */
   public void fitScreenRegionInterpolation(Rectangle rectangle) {
+    Node eye = eye();
     _interpolator.stop();
     _interpolator.clear();
     _interpolator.addKeyFrame(eye().detach());
-    Frame originalFrame = eye();
-    Frame tempFrame = eye().detach();
-    setEye(tempFrame);
+    setEye(eye().get());
     fitScreenRegion(rectangle);
-    setEye(originalFrame);
-    _interpolator.addKeyFrame(tempFrame);
+    _interpolator.addKeyFrame(eye().detach());
+    setEye(eye);
     _interpolator.start();
   }
 
@@ -2310,15 +2308,15 @@ public class Graph {
    * The {@link Frame#orientation()} of the {@link #eye()} is not modified.
    */
   public void fitBallInterpolation() {
+    Node eye = eye();
     _interpolator.stop();
     _interpolator.clear();
     _interpolator.addKeyFrame(eye().detach());
-    Frame originalFrame = eye();
-    Frame tempFrame = eye().detach();
-    setEye(tempFrame);
+    //setEye(eye().detach());
+    setEye(eye().get());
     fitBall();
-    setEye(originalFrame);
-    _interpolator.addKeyFrame(tempFrame);
+    _interpolator.addKeyFrame(eye().detach());
+    setEye(eye);
     _interpolator.start();
   }
 
@@ -2512,7 +2510,7 @@ public class Graph {
    * represent the frame hierarchy: {@code leftArm} and {@code rightArm} are both
    * correctly drawn with respect to the {@code body} coordinate system.
    *
-   * @see #applyWorldTransformation(Frame)
+   * @see #applyWorldTransformation(Node)
    */
   public void applyTransformation(Frame frame) {
     if (is2D()) {
@@ -2527,7 +2525,7 @@ public class Graph {
   }
 
   /**
-   * Same as {@link #applyTransformation(Frame)}, but applies the global transformation
+   * Same as {@link #applyTransformation(Node)}, but applies the global transformation
    * defined by the frame.
    */
   public void applyWorldTransformation(Frame frame) {

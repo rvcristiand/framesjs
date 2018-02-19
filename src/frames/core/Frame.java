@@ -242,7 +242,7 @@ public class Frame {
    *
    * @see #reference()
    */
-  public Frame detach() {
+  protected Frame detach() {
     Frame frame = new Frame();
     frame.setWorldMatrix(this);
     return frame;
@@ -1011,7 +1011,7 @@ public class Frame {
    * <p>
    * <b>Attention:</b> In Processing this technique is inefficient because
    * {@code papplet.applyMatrix} will try to calculate the inverse of the transform.
-   * Use {@link frames.core.Graph#applyTransformation(Frame)} instead.
+   * Use {@link frames.core.Graph#applyTransformation(Node)} instead.
    *
    * @see #setMatrix(Frame)
    * @see #worldMatrix()

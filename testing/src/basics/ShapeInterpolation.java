@@ -37,6 +37,7 @@ public class ShapeInterpolation extends PApplet {
     scene.setRadius(150);
 
     // interpolation 1. Default eye interpolations
+    scene.fitBall();
     scene.fitBallInterpolation();
 
     //PShape pshape = scene.is3D() ? createShape(SPHERE, 10) : createShape(RECT, 0,0,50,50);

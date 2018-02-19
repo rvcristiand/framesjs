@@ -66,7 +66,7 @@ import java.util.List;
  * {@link #cull(boolean)}.
  * <p>
  * A node may also be defined as the {@link Graph#eye()} (see {@link #isEye()}
- * and {@link Graph#setEye(Frame)}). Some user gestures are then interpreted in a negated way,
+ * and {@link Graph#setEye(Node)}). Some user gestures are then interpreted in a negated way,
  * respect to non-eye nodes. For instance, with a move-to-the-right user gesture the
  * {@link Graph#eye()} has to go to the <i>left</i>, so that the scene seems to move
  * to the right.
@@ -204,6 +204,10 @@ public class Node extends Frame implements Grabber {
   protected Node(Graph graph, Node reference, Vector translation, Quaternion rotation, float scaling) {
     super(reference, translation, rotation, scaling);
     _graph = graph;
+
+    if(graph() == null)
+      return;
+
     _id = ++graph()._nodeCount;
     // unlikely but theoretically possible
     if (_id == 16777216)
@@ -248,10 +252,6 @@ public class Node extends Frame implements Grabber {
       }
     };
     graph().registerTask(_flyTask);
-    // end
-
-    // pkgnPrecision = Precision.ADAPTIVE;
-    // setPrecisionThreshold(Math.round(scn.radius()/4));
     graph().inputHandler().addGrabber(this);
     _Precision = Precision.FIXED;
     setPrecisionThreshold(20);
@@ -334,6 +334,22 @@ public class Node extends Frame implements Grabber {
   @Override
   public Node get() {
     return new Node(this.graph(), this);
+  }
+
+  // detached frames
+
+  public Node(Vector translation, Quaternion rotation, float scaling) {
+    this(null, null, translation, rotation, scaling);
+  }
+
+  //TODO prefix these two with _
+  @Override
+  public Node detach() {
+    return new Node(null, null, this.position(), this.orientation(), this.magnitude());
+  }
+
+  public boolean isDetached() {
+    return graph() == null;
   }
 
   //_id
@@ -537,7 +553,7 @@ public class Node extends Frame implements Grabber {
   /**
    * Returns true if this node is the {@link Graph#eye()}, and false otherwise.
    *
-   * @see Graph#setEye(Frame)
+   * @see Graph#setEye(Node)
    * @see Graph#eye()
    */
   public boolean isEye() {
@@ -744,7 +760,7 @@ public class Node extends Frame implements Grabber {
    *
    * @see #applyTransformation()
    * @see #matrix()
-   * @see Graph#applyTransformation(Frame)
+   * @see Graph#applyTransformation(Node)
    */
   public void applyTransformation(Graph graph) {
     graph.applyTransformation(this);
@@ -757,7 +773,7 @@ public class Node extends Frame implements Grabber {
    *
    * @see #applyWorldTransformation()
    * @see #worldMatrix()
-   * @see Graph#applyWorldTransformation(Frame)
+   * @see Graph#applyWorldTransformation(Node)
    */
   public void applyWorldTransformation(Graph graph) {
     graph.applyWorldTransformation(this);
@@ -2532,20 +2548,14 @@ public class Node extends Frame implements Grabber {
     }
   }
 
-  @Override
-  public void rotateAroundFrame(float roll, float pitch, float yaw, Frame frame) {
+  //TODO needs testing
+  public void rotateAroundFrame(float roll, float pitch, float yaw, Node frame) {
     if (frame != null) {
-      Frame ref = frame.get();
-      if (ref instanceof Node)
-        _graph.pruneBranch((Node) ref);
-      else if (ref instanceof Grabber) {
-        _graph.inputHandler().removeGrabber((Grabber) ref);
-      }
-      Node copy = get();
-      _graph.pruneBranch(copy);
-      copy.setReference(ref);
-      copy.setWorldMatrix(this);
-      ref.rotate(new Quaternion(_graph.isLeftHanded() ? -roll : roll, pitch, _graph.isLeftHanded() ? -yaw : yaw));
+      Node axis = frame.detach();
+      Node copy = detach();
+      copy.setReference(axis);
+      //copy.setWorldMatrix(this);
+      axis.rotate(new Quaternion(_graph.isLeftHanded() ? -roll : roll, pitch, _graph.isLeftHanded() ? -yaw : yaw));
       setWorldMatrix(copy);
       return;
     }
