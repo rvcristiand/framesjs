@@ -122,8 +122,10 @@ public class FrameInterpolation extends PApplet {
     if (key == '+')
       nodeInterpolator.setSpeed(nodeInterpolator.speed() + 0.25f);
 
-    if (key == 's')
+    if (key == 's') {
       scene.fitBallInterpolation();
+      println(scene.nodes().size());
+    }
     if (key == 'f')
       scene.fitBall();
 
