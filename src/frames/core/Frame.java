@@ -310,9 +310,6 @@ public class Frame implements Grabber {
     setReference(reference);
     _graph = graph;
 
-    if (graph() == null)
-      return;
-
     _id = ++graph()._nodeCount;
     // unlikely but theoretically possible
     if (_id == 16777216)
@@ -370,9 +367,6 @@ public class Frame implements Grabber {
     _reference = other.reference();
     _constraint = other.constraint();
     this._graph = graph;
-
-    if (graph() == null)
-      return;
 
     if (this.graph() == other.graph()) {
       this._id = ++graph()._nodeCount;
