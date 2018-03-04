@@ -22,23 +22,23 @@ Typical usage comprises three steps: scene instantiation, setting an eye and set
 
 ### Scene instantiation
 
-Instantiate your on-screen scene at the [setup()](https://processing.org/reference/setup_.html):
+Instantiate your on-screen scene at the [setup()](https://p5js.org/reference/#/p5/setup):
 
 ```js
 var scene;
-setup() {
+function setup() {
   scene = new Scene(this);
 }
 ```
 
-The `scene` [frontBuffer()](https://visualcomputing.github.io/frames-javadocs/frames/processing/Scene.html#frontBuffer--) corresponds to the *PApplet* main canvas.
+The `scene` [frontBuffer()](https://visualcomputing.github.io/frames-javadocs/frames/processing/Scene.html#frontBuffer--) corresponds to the *p5.js* main canvas.
  
-Off-screen scenes should be instantiated upon a [PGraphics](https://processing.org/reference/PGraphics.html) object:
+Off-screen scenes should be instantiated upon a [PGraphics](https://p5js.org/reference/#/p5.Graphics) object:
 
 ```js
 var scene;
 var canvas;
-setup() {
+function setup() {
   canvas = createGraphics(500, 500, P3D);
   scene = new Scene(this, canvas);
 }
@@ -52,8 +52,8 @@ The scene eye can be an instance of [Frame](https://visualcomputing.github.io/fr
 
 ```js
 ...
-Frame eye;
-void setup() {
+var eye;
+function setup() {
   ...
   eye = new Frame();
   scene.setEye(eye);
@@ -64,16 +64,16 @@ The eye can be controlled programmatically using the powerful [Frame](https://vi
 
 To set the eye from a node instance use code such as the following:
 
-```java
+```js
 ...
-Node eye;
-void setup() {
+var eye;
+function setup() {
   ...
   eye = new Node(scene) {
     @Override
-    public void interact(Event event) {
+    function interact(event) {
       // translate the node from a LEFT mouse button drag
-      if (event.shortcut().matches(new Shortcut(PApplet.LEFT)))
+      if (event.shortcut().matches(new Shortcut(LEFT)))
         translate(event);
     }
   };
@@ -86,7 +86,7 @@ The eye can be controlled both programmatically (since a [Node](https://visualco
 
 ### Shapes
 
-A [Shape](https://visualcomputing.github.io/frames-javadocs/frames/processing/Shape.html) is a [Node](https://visualcomputing.github.io/frames-javadocs/frames/core/Node.html) specialization that can be set from a retained-mode rendering Processing [PShape](https://processing.org/reference/PShape.html) or from an immediate-mode rendering Processing procedure. Shapes can be picked precisely using their projection onto the screen, see [setPrecision(Node.Precision)](https://visualcomputing.github.io/frames-javadocs/frames/processing/Shape.html#setPrecision-frames.core.Node.Precision-). Use [traverse()](https://visualcomputing.github.io/frames-javadocs/frames/processing/Scene.html#traverse--) to render all scene-graph shapes or [draw()](https://visualcomputing.github.io/frames-javadocs/frames/processing/Shape.html#draw--) to render a specific one instead.
+A [Shape](https://visualcomputing.github.io/frames-javadocs/frames/processing/Shape.html) is a [Node](https://visualcomputing.github.io/frames-javadocs/frames/core/Node.html) specialization that can be set from a retained-mode rendering *p5.js* [PShape](https://p5js.org/reference/#/p5.Geometry) or from an immediate-mode rendering *p5.js* procedure. Shapes can be picked precisely using their projection onto the screen, see [setPrecision(Node.Precision)](https://visualcomputing.github.io/frames-javadocs/frames/processing/Shape.html#setPrecision-frames.core.Node.Precision-). Use [traverse()](https://visualcomputing.github.io/frames-javadocs/frames/processing/Scene.html#traverse--) to render all scene-graph shapes or [draw()](https://visualcomputing.github.io/frames-javadocs/frames/processing/Shape.html#draw--) to render a specific one instead.
 
 #### Retained-mode shapes
 
@@ -96,14 +96,14 @@ To set a retained-mode shape use `Shape shape = new Shape(Scene scene, PShape sh
 
 Immediate-mode shapes should override `Shape.set(PGraphics)`, e.g., using an anonymous inner [Shape](https://visualcomputing.github.io/frames-javadocs/frames/processing/Shape.html#set-processing.core.PShape-) class intance, such as with the following:
  
-```java
+```js
 ...
-Shape shape;
-void setup() {
+var shape;
+function setup() {
   ...
   shape = new Shape(scene) {
     @Override
-    protected void set(PGraphics canvas) {
+    function set(canvas) {
       //immediate-mode rendering procedure
     }
   };
@@ -116,16 +116,16 @@ Note tha shapes like nodes can be controlled interactively by overriding [intera
 
 A frame (and hence a node or a shape) can be animated through a key-frame [Catmull-Rom](https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull%E2%80%93Rom_spline) interpolator path. Use code such as the following:
 
-```java
-Scene scene;
-PShape pshape;
-Shape shape;
-Interpolator interpolator;
-void setup() {
+```js
+var scene;
+var pshape;
+var shape;
+var interpolator;
+function setup() {
   ...
   shape = new Shape(scene, pshape);
   interpolator = new Interpolator(shape);
-  for (int i = 0; i < random(4, 10); i++)
+  for (var i = 0; i < random(4, 10); i++)
     interpolator.addKeyFrame(Node.random(scene));
   interpolator.start();
 }
@@ -133,9 +133,9 @@ void setup() {
 
 which will create a random interpolator path containing [4..10] key-frames. The interpolation is also started. The interpolator path may be drawn with code like this:
 
-```java
+```js
 ...
-void draw() {
+function draw() {
   scene.traverse();
   scene.drawPath(interpolator, 5);
 }
@@ -149,7 +149,7 @@ To control your scene nodes by means different than the [mouse()](https://visual
 
 ## Drawing
 
-The [Scene](https://visualcomputing.github.io/frames-javadocs/frames/processing/Scene.html) implements several static drawing functions that complements those already provided by Processing, such as: `drawCylinder(PGraphics, int, float, float)}`, `drawHollowCylinder(PGraphics, int, float, float, Vector, Vector)`, `drawCone(PGraphics, int, float, float, float, float)`, `drawCone(PGraphics, int, float, float, float, float, float)` and `drawTorusSolenoid(PGraphics, int, int, float, float)`.
+The [Scene](https://visualcomputing.github.io/frames-javadocs/frames/processing/Scene.html) implements several static drawing functions that complements those already provided by *p5,js*, such as: `drawCylinder(PGraphics, int, float, float)}`, `drawHollowCylinder(PGraphics, int, float, float, Vector, Vector)`, `drawCone(PGraphics, int, float, float, float, float)`, `drawCone(PGraphics, int, float, float, float, float, float)` and `drawTorusSolenoid(PGraphics, int, int, float, float)`.
 
 Drawing functions that take a `PGraphics` parameter (including the above static ones), such as `beginScreenCoordinates(PGraphics)`,
 `endScreenCoordinates(PGraphics)`, `drawAxes(PGraphics, float)`, `drawCross(PGraphics, float, float, float)` and `drawGrid(PGraphics)` among others, can be used to set a `Shape` (see [set(PGraphics)](https://visualcomputing.github.io/frames-javadocs/frames/processing/Shape.html#set-processing.core.PShape-)).
@@ -158,7 +158,7 @@ Another scene's eye (different than this one) can be drawn with `drawEye(Graph)`
 
 ## Installation
 
-Import/update it directly from your PDE. Otherwise download your release from [here](https://github.com/VisualComputing/framesjs/releases) and extract it to your sketchbook `libraries` folder.
+Pending
 
 ## Contributors
 
