@@ -14,7 +14,9 @@ framesjs
 
 ## Description
 
-A 2D or 3D [graph](https://en.wikipedia.org/wiki/Scene_graph) of [frames](https://en.wikipedia.org/wiki/Frame_of_reference) providing eye, input and timing handling to third party raster and ray-tracing renderers. The _master git branch_ (the one you're looking at) support all [p5.js](https://p5js.org/) renderers.
+Simple, expressive, language-agnostic, and extensible [(2D/3D) scene graph](https://en.wikipedia.org/wiki/Scene_graph) of [frames](https://en.wikipedia.org/wiki/Frame_of_reference) featuring interaction, inverse kinematics, visualization and animation frameworks and supporting advanced (onscreen/offscreen) rendering techniques, such as [view frustum culling](http://cgvr.informatik.uni-bremen.de/teaching/cg_literatur/lighthouse3d_view_frustum_culling/index.html).
+
+*Framesjs* is meant to be coupled with third party raster and ray-tracing renderers. The _master git branch_ (the one you're looking at) is coupled with all [p5.js](https://p5js.org/) renderers.
 
 ## Usage
 
