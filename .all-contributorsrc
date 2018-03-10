@@ -8,27 +8,21 @@
   "commit": true,
   "contributors": [
     {
-      "login": "nakednous",
-      "name": "Jean Pierre Charalambos",
-      "avatar_url": "https://avatars2.githubusercontent.com/u/645599?v=4",
-      "profile": "https://github.com/nakednous",
+      "login": "jiapulidoar",
+      "name": "Jimmynex",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/13878096?v=4",
+      "profile": "https://github.com/jiapulidoar",
       "contributions": [
         "blog",
         "bug",
         "code",
         "design",
         "doc",
-        "eventOrganizing",
         "example",
-        "financial",
         "fundingFinding",
         "ideas",
-        "platform",
-        "plugin",
         "question",
-        "review",
         "talk",
-        "test",
         "tutorial",
         "video"
       ]
@@ -54,26 +48,6 @@
       ]
     },
     {
-      "login": "jiapulidoar",
-      "name": "Jimmynex",
-      "avatar_url": "https://avatars2.githubusercontent.com/u/13878096?v=4",
-      "profile": "https://github.com/jiapulidoar",
-      "contributions": [
-        "blog",
-        "bug",
-        "code",
-        "design",
-        "doc",
-        "example",
-        "fundingFinding",
-        "ideas",
-        "question",
-        "talk",
-        "tutorial",
-        "video"
-      ]
-    },
-    {
       "login": "xyos",
       "name": "xyos",
       "avatar_url": "https://avatars2.githubusercontent.com/u/96923?v=4",
@@ -82,6 +56,27 @@
         "code",
         "talk",
         "example"
+      ]
+    },
+    {
+      "login": "nakednous",
+      "name": "Jean Pierre Charalambos",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/645599?v=4",
+      "profile": "https://github.com/nakednous",
+      "contributions": [
+        "blog",
+        "code",
+        "design",
+        "doc",
+        "eventOrganizing",
+        "example",
+        "ideas",
+        "platform",
+        "plugin",
+        "question",
+        "review",
+        "talk",
+        "test"
       ]
     }
   ]
