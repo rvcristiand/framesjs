@@ -150,8 +150,9 @@ import java.util.List;
  *   ...
  *   shape = new Shape(scene, pshape);
  *   interpolator = new Interpolator(shape);
- *   for (int i = 0; i < random(4, 10); i++)
+ *   for (int i = 0; i < random(4, 10); i++) {
  *     interpolator.addKeyFrame(Node.random(scene));
+ *   }
  *   interpolator.start();
  * }
  * }
